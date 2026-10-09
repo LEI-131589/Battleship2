@@ -396,6 +396,11 @@ public class Game implements IGame
 			if (!ship.stillFloating()) {
 				logger.warn("ALERTA: O navio da categoria '{}' foi AFUNDADO! (Total afundados: {})",
 						ship.getCategory(), countSinks);
+
+				// Mensagem em destaque no ecrã para o utilizador
+				System.out.println("\n=================================================");
+				System.out.println("NAVIO AFUNDADO: " + ship.getCategory().toUpperCase());
+				System.out.println("=================================================\n");
 			}
 			return new ShotResult(true, false, ship, !ship.stillFloating());
 		}
