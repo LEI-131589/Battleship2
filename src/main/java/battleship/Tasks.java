@@ -32,6 +32,7 @@ public class Tasks {
 	private static final String MAPA = "mapa";
 	private static final String STATUS = "estado";
 	private static final String SIMULA = "simula";
+	private static final String NAVIOS = "navios";
 
 	/**
 	 * This task also tests the fighting element of a round of three shots
@@ -61,6 +62,13 @@ public class Tasks {
 				case STATUS:
 					if (myFleet != null)
 						myFleet.printStatus();
+					break;
+				case NAVIOS:
+					if (myFleet != null) {
+						myFleet.printFloatingShips();
+					} else {
+						System.out.println("Ainda não existe uma frota.");
+					}
 					break;
 				case MAPA:
 					if (myFleet != null)
@@ -122,6 +130,7 @@ public class Tasks {
 		System.out.println("- " + GERAFROTA + ": Gera uma frota aleatória de navios.");
 		System.out.println("- " + LEFROTA + ": Permite criar e carregar uma frota personalizada.");
 		System.out.println("- " + STATUS + ": Mostra o status atual da frota.)");
+		System.out.println("- " + NAVIOS + ": Consulta os navios disponíveis.");
 		System.out.println("- " + MAPA + ": Exibe o mapa da frota.");
 		System.out.println("- " + RAJADA + ": Realiza uma rajada de disparos.");
 		System.out.println("- " + SIMULA + ": Simula um jogo completo.");
