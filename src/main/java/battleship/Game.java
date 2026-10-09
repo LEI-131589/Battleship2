@@ -3,11 +3,16 @@ package battleship;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Game implements IGame
 {
+
+	private static final Logger logger = LoggerFactory.getLogger(Game.class);
+
 	/**
 	 * Prints the game board by representing the positions of ships, adjacent tiles,
 	 * shots, and other game elements onto the console. The method also optionally
@@ -389,7 +394,8 @@ public class Game implements IGame
 			ship.shoot(pos);
 			countHits++;
 			if (!ship.stillFloating()) {
-				countSinks++;
+				logger.warn("ALERTA: O navio da categoria '{}' foi AFUNDADO! (Total afundados: {})",
+						ship.getCategory(), countSinks);
 			}
 			return new ShotResult(true, false, ship, !ship.stillFloating());
 		}
