@@ -4,7 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import java.io.FileOutputStream;
+
 import java.util.*;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 
 public class Game implements IGame
 {
@@ -168,11 +174,13 @@ public class Game implements IGame
 	private Integer countHits;
 	private Integer countSinks;
 	private int moveNumber;
+	private boolean gameOver;
 
 	//------------------------------------------------------------------
 	public Game(IFleet myFleet)
 	{
 		this.moveNumber = 1;
+		this.gameOver = false;
 
 		this.alienMoves = new ArrayList<IMove>();
 		this.myMoves = new ArrayList<IMove>();
@@ -221,7 +229,10 @@ public class Game implements IGame
 	 */
 	public String randomEnemyFire() {
 
-		// Criar uma instância de Random com uma seed baseada no timestamp atual
+		if (this.gameOver) {
+			System.out.println("O jogo já acabou. Não é possivel realizar mais jogadas.");
+			return "{}";
+		}
 		Random random = new Random(System.currentTimeMillis());
 
 		Set<IPosition> usablePositions = new HashSet<IPosition>();
@@ -285,6 +296,11 @@ public class Game implements IGame
 
 		assert in != null;
 
+		if (this.gameOver) {
+			System.out.println("O jogo já acabou. Não é possível realizar mais jogadas.");
+			return "{}";
+		}
+
 		String input = in.nextLine().trim();
 
 		// Criar lista para armazenar os tiros
@@ -337,7 +353,7 @@ public class Game implements IGame
 
 		List<ShotResult> shotResults = new ArrayList<ShotResult>();
 		if (shots.size() != NUMBER_SHOTS) {
-			throw new IllegalArgumentException("Must fire exactly " + NUMBER_SHOTS + " shots per move.");
+			throw new IllegalArgumentException("Deve realizar exatamente " + NUMBER_SHOTS + " tiros por movimento.");
 		}
 
 		List<IPosition> alreadyShot = new ArrayList<IPosition>();
@@ -355,6 +371,14 @@ public class Game implements IGame
 		alienMoves.add(move);
 
 		moveNumber++;
+
+		if (this.myFleet.areAllShipsSunk()) {
+			this.gameOver = true;
+			declareVictory("Alien"); // O Inimigo afundou a tua frota
+		} else if (this.alienFleet.areAllShipsSunk()) {
+			this.gameOver = true;
+			declareVictory("Player"); // Tu afundaste a frota do inimigo
+		}
 	}
 
 	/**
@@ -451,5 +475,51 @@ public class Game implements IGame
 			System.out.println("+--------------------------------------------------------------+");
 			System.out.println("| Maldito sejas, Java Sparrow, eu voltarei, glub glub glub ... |");
 			System.out.println("+--------------------------------------------------------------+");
+	}
+	/**
+	 * Declares the winner, prints a message to the console, and generates a PDF report.
+	 *
+	 * @param winnerName the name of the winning player
+	 */
+	private void declareVictory(String winnerName) {
+		String victoryMessage = "VITÓRIA! Player " + winnerName + " afundou todos os navios do inimigo!";
+
+		System.out.println();
+		System.out.println("==================================================");
+		System.out.println(victoryMessage);
+		System.out.println("==================================================");
+
+		generatePdfReport(winnerName, victoryMessage);
+	}
+
+	/**
+	 * Generates a PDF file containing the match results using the OpenPDF library.
+	 *
+	 * @param winnerName the name of the winner (used for the filename)
+	 * @param message    the victory message to include in the document
+	 */
+	private void generatePdfReport(String winnerName, String message) {
+		try {
+			Document document = new Document();
+			String fileName = "VictoryReport_" + winnerName + ".pdf";
+
+			PdfWriter.getInstance(document, new FileOutputStream(fileName));
+
+			document.open();
+			document.add(new Paragraph("Battleship Match - Final Report"));
+			document.add(new Paragraph("--------------------------------------------------"));
+			document.add(new Paragraph(""));
+			document.add(new Paragraph(message));
+			document.add(new Paragraph("Total moves: " + (this.moveNumber - 1))); // <-- CORRIGIDO
+			document.close();
+
+			System.out.println("Victory PDF report foi criado com sucesso: " + fileName);
+		} catch (Exception e) {
+			System.err.println("Erro ao criar o ficheiro pdf: " + e.getMessage());
+		}
+	}
+	@Override
+	public boolean isGameOver() {
+		return this.gameOver;
 	}
 }
