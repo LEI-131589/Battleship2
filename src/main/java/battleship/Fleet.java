@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package battleship;
 
@@ -9,8 +9,7 @@ import java.util.List;
 /**
  * The type Fleet.
  */
-public class Fleet implements IFleet
-{
+public class Fleet implements IFleet {
 	/**
 	 * Creates a randomly generated fleet containing ships of various predefined types.
 	 * Each ship is assigned a random bearing and position. If a ship cannot be added
@@ -24,11 +23,11 @@ public class Fleet implements IFleet
 
 		// Define the types of ships to be added
 		String[] shipTypes =
-					{"galeao",                           // 1 galleon
-				 	"fragata",                           // 1 frigate
- 				 	"nau", "nau",                        // 2 carracks
-					"caravela", "caravela", "caravela",  // 3 caravels
-					"barca", "barca", "barca", "barca"}; // 4 barges
+				{"galeao",                           // 1 galleon
+						"fragata",                           // 1 frigate
+						"nau", "nau",                        // 2 carracks
+						"caravela", "caravela", "caravela",  // 3 caravels
+						"barca", "barca", "barca", "barca"}; // 4 barges
 
 		int fleetSize = 0;
 
@@ -46,7 +45,7 @@ public class Fleet implements IFleet
 	}
 
 
-    // -----------------------------------------------------
+	// -----------------------------------------------------
 
 	/**
 	 * The Ships.
@@ -54,13 +53,13 @@ public class Fleet implements IFleet
 	private final List<IShip> ships;
 
 	// -----------------------------------------------------ge
+
 	/**
 	 * Instantiates a new Fleet.
 	 */
-	public Fleet()
-    {
-	ships = new ArrayList<>();
-    }
+	public Fleet() {
+		ships = new ArrayList<>();
+	}
 
 	/**
 	 * Gets ships.
@@ -68,11 +67,10 @@ public class Fleet implements IFleet
 	 * @return the ships
 	 */
 	@Override
-    public List<IShip> getShips()
-    {
-	return ships;
-    }
-	
+	public List<IShip> getShips() {
+		return ships;
+	}
+
 	/**
 	 * Add ship boolean.
 	 *
@@ -80,23 +78,21 @@ public class Fleet implements IFleet
 	 * @return the boolean
 	 */
 	/*
-     * (non-Javadoc)
-     * 
-     * @see battleship.IFleet#addShip(battleship.IShip)
-     */
-    @Override
-    public boolean addShip(IShip s)
-    {
+	 * (non-Javadoc)
+	 *
+	 * @see battleship.IFleet#addShip(battleship.IShip)
+	 */
+	@Override
+	public boolean addShip(IShip s) {
 		assert s != null;
 
 		boolean result = false;
-		if ((ships.size() <= FLEET_SIZE) && (s.isInsideBoard()) && (!colisionRisk(s)))
-		{
+		if ((ships.size() <= FLEET_SIZE) && (s.isInsideBoard()) && (!colisionRisk(s))) {
 			ships.add(s);
 			result = true;
 		}
 		return result;
-    }
+	}
 
 	/**
 	 * Gets ships like.
@@ -105,13 +101,12 @@ public class Fleet implements IFleet
 	 * @return the ships like
 	 */
 	/*
-     * (non-Javadoc)
-     * 
-     * @see battleship.IFleet#getShipsLike(java.lang.String)
-     */
-    @Override
-    public List<IShip> getShipsLike(String category)
-    {
+	 * (non-Javadoc)
+	 *
+	 * @see battleship.IFleet#getShipsLike(java.lang.String)
+	 */
+	@Override
+	public List<IShip> getShipsLike(String category) {
 		assert category != null;
 
 		List<IShip> shipsLike = new ArrayList<IShip>();
@@ -120,7 +115,7 @@ public class Fleet implements IFleet
 				shipsLike.add(s);
 
 		return shipsLike;
-    }
+	}
 
 	/**
 	 * Gets floating ships.
@@ -128,20 +123,19 @@ public class Fleet implements IFleet
 	 * @return the floating ships
 	 */
 	/*
-     * (non-Javadoc)
-     * 
-     * @see battleship.IFleet#getFloatingShips()
-     */
-    @Override
-    public List<IShip> getFloatingShips()
-    {
+	 * (non-Javadoc)
+	 *
+	 * @see battleship.IFleet#getFloatingShips()
+	 */
+	@Override
+	public List<IShip> getFloatingShips() {
 		List<IShip> floatingShips = new ArrayList<IShip>();
 		for (IShip s : ships)
 			if (s.stillFloating())
 				floatingShips.add(s);
 
 		return floatingShips;
-    }
+	}
 
 	/**
 	 * Gets sunk ships.
@@ -154,8 +148,7 @@ public class Fleet implements IFleet
 	 * @see battleship.IFleet#getSunkShips()
 	 */
 	@Override
-	public List<IShip> getSunkShips()
-	{
+	public List<IShip> getSunkShips() {
 		List<IShip> sunkShips = new ArrayList<IShip>();
 		for (IShip s : ships)
 			if (!s.stillFloating())
@@ -171,20 +164,19 @@ public class Fleet implements IFleet
 	 * @return the ship
 	 */
 	/*
-     * (non-Javadoc)
-     * 
-     * @see battleship.IFleet#shipAt(battleship.IPosition)
-     */
-    @Override
-    public IShip shipAt(IPosition pos)
-    {
+	 * (non-Javadoc)
+	 *
+	 * @see battleship.IFleet#shipAt(battleship.IPosition)
+	 */
+	@Override
+	public IShip shipAt(IPosition pos) {
 		assert pos != null;
 
 		for (IShip ship : ships)
 			if (ship.occupies(pos))
 				return ship;
 		return null;
-    }
+	}
 
 	/**
 	 * Colision risk boolean.
@@ -192,25 +184,22 @@ public class Fleet implements IFleet
 	 * @param s the s
 	 * @return the boolean
 	 */
-	private boolean colisionRisk(IShip s)
-    {
+	private boolean colisionRisk(IShip s) {
 		assert s != null;
 
-		for (int i = 0; i < ships.size(); i++)
-		{
+		for (int i = 0; i < ships.size(); i++) {
 			if (ships.get(i).tooCloseTo(s))
 				return true;
 		}
 		return false;
-    }
+	}
 
 	/**
 	 * This operation prints all the given ships
 	 *
 	 * @param ships The list of ships
 	 */
-	public void printShips(List<IShip> ships)
-	{
+	public void printShips(List<IShip> ships) {
 		assert ships != null;
 
 		for (IShip ship : ships)
@@ -220,8 +209,7 @@ public class Fleet implements IFleet
 	/**
 	 * This operation shows the state of a fleet
 	 */
-	public void printStatus()
-    {
+	public void printStatus() {
 		System.out.println("Estado da Frota: " + this.getFloatingShips().size() + " a flutuar, " + this.getSunkShips().size() + " afundados!");
 //		printAllShips();
 //		printFloatingShips();
@@ -230,7 +218,7 @@ public class Fleet implements IFleet
 //		printShipsByCategory("Nau");
 //		printShipsByCategory("Caravela");
 //		printShipsByCategory("Barca");
-    }
+	}
 
 	/**
 	 * This operation prints all the ships of a fleet belonging to a particular
@@ -238,26 +226,39 @@ public class Fleet implements IFleet
 	 *
 	 * @param category The category of ships of interest
 	 */
-	public void printShipsByCategory(String category)
-    {
+	public void printShipsByCategory(String category) {
 		assert category != null;
 
 		printShips(getShipsLike(category));
-    }
+	}
 
 	/**
 	 * This operation prints all the ships of a fleet but not yet shot
 	 */
-	public void printFloatingShips()
-    {
-	printShips(getFloatingShips());
-    }
+	public void printFloatingShips() {
+		printShips(getFloatingShips());
+	}
 
 	/**
 	 * This operation prints all the ships of a fleet
 	 */
-	void printAllShips()
-    {
+	void printAllShips() {
 		printShips(ships);
-    }
+	}
+
+	/**
+	 * Checks if all ships in the fleet are sunk.
+	 *
+	 * @return true if all ships are sunk, false otherwise
+	 */
+	public boolean areAllShipsSunk() {
+		if (ships.isEmpty()) {
+			return false;
+		}
+
+		// Se tiver navios e a lista dos que flutuam estiver vazia, então afundaram todos
+		return getFloatingShips().isEmpty();
+	}
 }
+
+
