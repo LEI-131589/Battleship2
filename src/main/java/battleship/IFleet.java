@@ -66,5 +66,6 @@ public interface IFleet
 	void printStatus();
 
 	boolean areAllShipsSunk();
+	void printFloatingShips();
 }
 
