@@ -120,5 +120,9 @@ public interface IGame
 	void printAlienBoard(boolean show_shots, boolean show_legend);
 
 	void over();
+
+	/**
+	 * Verifica se o jogo já terminou
+	 */
 	boolean isGameOver();
 }

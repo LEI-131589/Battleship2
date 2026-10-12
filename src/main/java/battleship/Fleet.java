@@ -247,9 +247,9 @@ public class Fleet implements IFleet {
 	}
 
 	/**
-	 * Checks if all ships in the fleet are sunk.
+	 * Verifica se todos os navios estão afundados
 	 *
-	 * @return true if all ships are sunk, false otherwise
+	 * @return devolve true se todos os navios estiverem afundados, ou false caso contrário
 	 */
 	public boolean areAllShipsSunk() {
 		if (ships.isEmpty()) {
