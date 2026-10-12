@@ -1,5 +1,8 @@
 package battleship;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * The type Frigate represents a ship with a size of 4 units.
  * It is positioned on the game board based on its bearing and initial position.
@@ -16,7 +19,8 @@ public class Frigate extends Ship {
 	 * @param bearing The bearing of the ship (NORTH, SOUTH, EAST, or WEST).
 	 * @param pos     The initial position of the ship on the game board.
 	 */
-	public Frigate(Compass bearing, IPosition pos) {
+	@JsonCreator
+	public Frigate(@JsonProperty("bearing") Compass bearing, @JsonProperty("pos") IPosition pos) {
 		super("Fragata", bearing, pos, 4);
 
 		switch (bearing) {
