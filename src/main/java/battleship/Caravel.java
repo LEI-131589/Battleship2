@@ -1,5 +1,8 @@
 package battleship;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * The type Caravel represents a ship with a size of 2 units.
  * It is positioned on the game board based on its bearing and initial position.
@@ -16,7 +19,8 @@ public class Caravel extends Ship {
 	 * @param bearing The bearing of the ship (NORTH, SOUTH, EAST, or WEST).
 	 * @param pos     The initial position of the ship on the game board.
 	 */
-	public Caravel(Compass bearing, IPosition pos) {
+	@JsonCreator
+	public Caravel(@JsonProperty("bearing") Compass bearing, @JsonProperty("pos") IPosition pos) {
 		super("Caravela", bearing, pos, 2);
 
 		switch (bearing) {

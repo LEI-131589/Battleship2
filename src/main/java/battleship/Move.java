@@ -3,6 +3,8 @@ package battleship;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;
 
@@ -21,7 +23,8 @@ public class Move implements IMove {
 	private final List<IGame.ShotResult> shotResults;
 
 	//-------------------------------------------------------------------
-	public Move(int moveNumber, List<IPosition> moveShots, List<IGame.ShotResult> moveResults) {
+	@JsonCreator
+	public Move(@JsonProperty("number") int moveNumber, @JsonProperty("shots") List<IPosition> moveShots, @JsonProperty("shotResults") List<IGame.ShotResult> moveResults) {
 		this.number = moveNumber;
 		this.shots = moveShots;
 		this.shotResults = moveResults;

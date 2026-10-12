@@ -2,6 +2,9 @@ package battleship;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * The type Carrack represents a ship with a size of 3 units.
  * It is positioned on the game board based on its bearing and initial position.
@@ -10,6 +13,8 @@ import java.util.List;
  * Date: 2023-10-10
  * Time: 15:30
  */
+
+
 public class Carrack extends Ship {
 
 	/**
@@ -18,7 +23,8 @@ public class Carrack extends Ship {
 	 * @param bearing The bearing of the ship (NORTH, SOUTH, EAST, or WEST).
 	 * @param pos     The initial position of the ship on the game board.
 	 */
-	public Carrack(Compass bearing, IPosition pos) {
+	@JsonCreator
+	public Carrack(@JsonProperty("bearing") Compass bearing, @JsonProperty("pos") IPosition pos) {
 		super("Nau", bearing, pos, 3);
 
 		switch (bearing) {

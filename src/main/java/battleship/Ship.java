@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 /**
  * The type Ship.
  */
@@ -120,6 +122,12 @@ public abstract class Ship implements IShip
 
 		positions = new ArrayList<>();
     }
+
+	@JsonSetter("positions")
+	public void setPositionsForJackson(List<IPosition> positionsFromJson) {
+		this.positions.clear();
+		this.positions.addAll(positionsFromJson);
+	}
 
 	/**
 	 * Gets category.

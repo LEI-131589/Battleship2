@@ -1,10 +1,19 @@
 package battleship;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 
 /**
  * The type Tasks.
@@ -23,6 +32,9 @@ public class Tasks {
 	/**
 	 * Strings to be used by the user
 	 */
+	private static final String NOVO = "novo";
+	private static final String CARREGAR = "carregar";
+	private static final String GRAVAR = "gravar";
 	private static final String AJUDA = "ajuda";
 	private static final String GERAFROTA = "gerafrota";
 	private static final String LEFROTA = "lefrota";
@@ -32,6 +44,7 @@ public class Tasks {
 	private static final String MAPA = "mapa";
 	private static final String STATUS = "estado";
 	private static final String SIMULA = "simula";
+	private static final String EXIT = "exit";
 
 	/**
 	 * This task also tests the fighting element of a round of three shots
@@ -40,14 +53,33 @@ public class Tasks {
 
 		IFleet myFleet = null;
 		IGame game = null;
-		menuHelp();
-
-		System.out.print("> ");
 		Scanner in = new Scanner(System.in);
+
+		menuHelp();
+		System.out.print("> ");
 		String command = in.next();
+
 		while (!command.equals(DESISTIR)) {
 
 			switch (command) {
+				case NOVO:
+					System.out.println("Inicie um novo jogo com '" + GERAFROTA + "' ou '" + LEFROTA + "'.");
+					break;
+				case CARREGAR:
+					Game loadedGame = carregarJogoInterativo(in);
+					if (loadedGame != null) {
+						game = loadedGame;
+						myFleet = game.getMyFleet();
+						game.printMyBoard(true, true);
+					}
+					break;
+				case GRAVAR:
+					if (game != null) {
+						gravarJogoInterativo((Game) game, in);
+					} else {
+						System.out.println("Não há jogo a decorrer para gravar.");
+					}
+					break;
 				case GERAFROTA:
 					myFleet = Fleet.createRandom();
 					game = new Game(myFleet);
@@ -119,6 +151,9 @@ public class Tasks {
 	public static void menuHelp() {
 		System.out.println("======================= AJUDA DO MENU =========================");
 		System.out.println("Digite um dos comandos abaixo para interagir com o jogo:");
+		System.out.println("- " + NOVO + ": Inicia um novo jogo");
+		System.out.println("- " + CARREGAR + ": Carrega um jogo existente na pasta data");
+		System.out.println("- " + GRAVAR + ": Grava o jogo atual na pasta data");
 		System.out.println("- " + GERAFROTA + ": Gera uma frota aleatória de navios.");
 		System.out.println("- " + LEFROTA + ": Permite criar e carregar uma frota personalizada.");
 		System.out.println("- " + STATUS + ": Mostra o status atual da frota.)");
@@ -227,4 +262,119 @@ public class Tasks {
 		}
 	}
 
+
+// -------------------------------------------------------------------------
+	// LÓGICA DE GRAVAÇÃO E CARREGAMENTO
+	// -------------------------------------------------------------------------
+
+	private static void gravarJogoInterativo(Game game, Scanner in) {
+		while(true) {
+			System.out.println("> Indique o nome do ficheiro JSON (caso pretenda sair escreva o comando \"exit\")");
+			System.out.print("> nome : ");
+			String nomeFicheiro = in.next();
+
+			if (nomeFicheiro.equalsIgnoreCase(EXIT)) {
+				System.out.println("Gravação cancelada.");
+				return;
+			}
+
+			if (!nomeFicheiro.endsWith(".json")) {
+				nomeFicheiro += ".json";
+			}
+
+			File dir = new File("data");
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+
+			File ficheiro = new File(dir, nomeFicheiro);
+			if (ficheiro.exists()) {
+				System.out.print("O ficheiro '" + nomeFicheiro + "' já existe. Deseja reescrever? (S/N): ");
+				String resposta = in.next();
+				if (!resposta.equalsIgnoreCase("S")) {
+					System.out.println("Gravação cancelada.");
+					continue;
+				}
+			}
+
+			gravarJogo(game, ficheiro.getPath());
+			break;
+		}
+
+	}
+
+	private static Game carregarJogoInterativo(Scanner in) {
+		Game game = null;
+		while (game == null) {
+			System.out.println("> Indique o nome do ficheiro JSON (caso pretenda sair escreva o comando \"exit\")");
+			System.out.print("> nome : ");
+			String nomeFicheiro = in.next();
+
+			if (nomeFicheiro.equalsIgnoreCase(EXIT)) {
+				break;
+			}
+
+			if (!nomeFicheiro.endsWith(".json")) {
+				nomeFicheiro += ".json";
+			}
+
+			File ficheiro = new File("data", nomeFicheiro);
+			if (!ficheiro.exists()) {
+				System.out.println("Erro: Ficheiro não encontrado na pasta 'data'. Tente novamente.");
+				continue;
+			}
+
+			game = carregarJogo(ficheiro.getPath());
+			if (game == null) {
+				System.out.println("Tente novamente com um ficheiro válido.");
+			}
+		}
+		return game;
+	}
+
+	private static ObjectMapper getConfiguredMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+		mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+		mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+		PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
+				.allowIfBaseType(Object.class)
+				.build();
+		mapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
+
+		return mapper;
+	}
+
+	public static void gravarJogo(Game jogo, String caminho) {
+		ObjectMapper mapper = getConfiguredMapper();
+		try {
+			mapper.writeValue(new File(caminho), jogo);
+			System.out.println("Jogo gravado com sucesso em: " + caminho);
+		} catch (IOException e) {
+			LOGGER.error("Erro ao gravar o jogo: {}", e.getMessage());
+			System.out.println("Erro ao gravar o jogo: " + e.getMessage());
+		}
+	}
+
+	public static Game carregarJogo(String caminho) {
+		ObjectMapper mapper = getConfiguredMapper();
+		File file = new File(caminho);
+
+		try {
+			Game jogo = mapper.readValue(file, Game.class);
+
+			if (jogo == null || jogo.getMyFleet() == null || jogo.getAlienFleet() == null) {
+				System.err.println("Erro: Ficheiro JSON inválido ou com dados em falta.");
+				return null;
+			}
+
+			System.out.println("Jogo carregado com sucesso!");
+			return jogo;
+		} catch (Exception e) {
+			System.err.println("Erro: Não foi possível ler o JSON. O formato é inválido ou está corrompido.");
+			return null;
+		}
+	}
 }

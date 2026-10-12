@@ -3,6 +3,8 @@ package battleship;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;
 
@@ -170,7 +172,8 @@ public class Game implements IGame
 	private int moveNumber;
 
 	//------------------------------------------------------------------
-	public Game(IFleet myFleet)
+	@JsonCreator
+	public Game(@JsonProperty("myFleet") IFleet myFleet)
 	{
 		this.moveNumber = 1;
 
