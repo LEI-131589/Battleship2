@@ -65,6 +65,9 @@ public interface IFleet
 	 */
 	void printStatus();
 
+	/**
+	 * Verifica se os navios estão todos afundados
+	 */
 	boolean areAllShipsSunk();
 	void printFloatingShips();
 }

@@ -10,7 +10,13 @@ import java.util.*;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.parser.PdfTextExtractor;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -490,9 +496,9 @@ public class Game implements IGame
 			System.out.println("+--------------------------------------------------------------+");
 	}
 	/**
-	 * Declares the winner, prints a message to the console, and generates a PDF report.
+	 * Declara o vencedor, imprime uma mensagem na consola e cria um ficheiro PDF
 	 *
-	 * @param winnerName the name of the winning player
+	 * @param winnerName o nome do jogador vencedor
 	 */
 	private void declareVictory(String winnerName) {
 		String victoryMessage = "VITÓRIA! Player " + winnerName + " afundou todos os navios do inimigo!";
@@ -506,31 +512,58 @@ public class Game implements IGame
 	}
 
 	/**
-	 * Generates a PDF file containing the match results using the OpenPDF library.
+	 * Cria um ficheiro PDF que contem os resultados dos jogos efetuados, organizado por horas, utilizando a biblioteca OpenPDF
 	 *
-	 * @param winnerName the name of the winner (used for the filename)
-	 * @param message    the victory message to include in the document
+	 * @param winnerName nome do vencedor (usado no nome do ficheiro)
+	 * @param message    mensagem de vitória a incluir no documento
 	 */
-	private void generatePdfReport(String winnerName, String message) {
-		try {
-			Document document = new Document();
-			String fileName = "VictoryReport_" + winnerName + ".pdf";
 
+	private void generatePdfReport(String winnerName, String message) {
+		String fileName = "VictoryReport_" + winnerName + ".pdf";
+		File file = new File(fileName);
+		String horaAtual = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+
+		try {
+			StringBuilder conteudoAcumulado = new StringBuilder();
+
+			if (file.exists()) {
+				PdfReader reader = new PdfReader(fileName);
+				PdfTextExtractor extractor = new PdfTextExtractor(reader);
+
+				for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+					String textoPagina = extractor.getTextFromPage(i).trim();
+					if (!textoPagina.isEmpty()) {
+						conteudoAcumulado.append(textoPagina).append("\n\n");
+					}
+				}
+				reader.close();
+			} else {
+				conteudoAcumulado.append("Battleship Match - Final Report (").append(winnerName).append(")\n");
+				conteudoAcumulado.append("==================================================\n\n");
+			}
+
+			conteudoAcumulado.append("Jogo às ").append(horaAtual).append("\n");
+			conteudoAcumulado.append(message).append("\n");
+			conteudoAcumulado.append("Total moves: ").append(this.moveNumber - 1).append("\n");
+			conteudoAcumulado.append("--------------------------------------------------");
+
+			Document document = new Document();
 			PdfWriter.getInstance(document, new FileOutputStream(fileName));
 
 			document.open();
-			document.add(new Paragraph("Battleship Match - Final Report"));
-			document.add(new Paragraph("--------------------------------------------------"));
-			document.add(new Paragraph(""));
-			document.add(new Paragraph(message));
-			document.add(new Paragraph("Total moves: " + (this.moveNumber - 1))); // <-- CORRIGIDO
+			document.add(new Paragraph(conteudoAcumulado.toString()));
 			document.close();
 
-			System.out.println("Victory PDF report foi criado com sucesso: " + fileName);
+			System.out.println("Victory PDF report atualizado com sucesso: " + fileName);
 		} catch (Exception e) {
-			System.err.println("Erro ao criar o ficheiro pdf: " + e.getMessage());
+			System.err.println("Erro ao criar/atualizar o ficheiro pdf: " + e.getMessage());
 		}
 	}
+	/**
+	 * Verifica se o jogo terminou
+	 *
+	 * @return devolve true se o jogo tiver terminado, ou false caso contrário
+	 */
 	@Override
 	public boolean isGameOver() {
 		return this.gameOver;
