@@ -6,6 +6,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
 import java.io.FileOutputStream;
 
 import java.util.*;
@@ -309,45 +315,59 @@ public class Game implements IGame
 	 *                                  required number of shots (NUMBER_SHOTS).
 	 */
 	public String readEnemyFire(Scanner in) {
-
-		assert in != null;
-
-		if (this.gameOver) {
-			System.out.println("O jogo já acabou. Não é possível realizar mais jogadas.");
-			return "{}";
-		}
-
-		String input = in.nextLine().trim();
-
-		// Criar lista para armazenar os tiros
 		List<IPosition> shots = new ArrayList<>();
 
-		Scanner inputScanner = new Scanner(input);
-		while (shots.size() < NUMBER_SHOTS && inputScanner.hasNext()) {
-			// Lê a próxima parte e constrói uma posição
-			String token = inputScanner.next();
+		String linha = in.nextLine().trim();
 
-			if (token.matches("[A-Za-z]")) {
-				// Caso seja somente uma coluna ("A", "B", etc.), esperar o próximo número
-				if (inputScanner.hasNextInt()) {
-					int row = inputScanner.nextInt();
-					shots.add(new Position(token.toUpperCase().charAt(0), row));
+		while (linha.isEmpty() && in.hasNextLine()) {
+			linha = in.nextLine().trim();
+		}
+
+		if (linha.contains("[")) {
+			StringBuilder jsonBuilder = new StringBuilder();
+			jsonBuilder.append(linha).append("\n");
+
+			while (!linha.contains("]")) {
+				linha = in.nextLine();
+				jsonBuilder.append(linha).append("\n");
+			}
+
+			List<String> coordsTraduzidas = convertJsonToClassicFormat(jsonBuilder.toString());
+			for (String coord : coordsTraduzidas) {
+				Scanner tiroScanner = new Scanner(coord + "\n");
+				shots.add(Tasks.readClassicPosition(tiroScanner));
+			}
+		}
+		else {
+			if (this.gameOver) {
+				System.out.println("O jogo já acabou. Não é possível realizar mais jogadas.");
+				return "{}";
+			}
+
+			Scanner inputScanner = new Scanner(linha);
+
+			while (shots.size() < NUMBER_SHOTS && inputScanner.hasNext()) {
+				String token = inputScanner.next();
+
+				if (token.matches("[A-Za-z]")) {
+					if (inputScanner.hasNextInt()) {
+						int row = inputScanner.nextInt();
+						shots.add(new Position(token.toUpperCase().charAt(0), row));
+					} else {
+						throw new IllegalArgumentException("Posição incompleta! A coluna '" + token + "' não é seguida por uma linha.");
+					}
 				} else {
-					throw new IllegalArgumentException("Posição incompleta! A coluna '" + token + "' não é seguida por uma linha.");
+					Scanner singleScanner = new Scanner(token);
+					shots.add(Tasks.readClassicPosition(singleScanner));
 				}
-			} else {
-				// Caso o token já contenha a coluna e a linha juntas (ex.: "A3")
-				Scanner singleScanner = new Scanner(token);
-				shots.add(Tasks.readClassicPosition(singleScanner));
+			}
+
+			if (shots.size() != NUMBER_SHOTS) {
+				throw new IllegalArgumentException("Você deve inserir exatamente " + NUMBER_SHOTS + " posições!");
 			}
 		}
 
-		if (shots.size() != NUMBER_SHOTS) {
-			throw new IllegalArgumentException("Você deve inserir exatamente " + NUMBER_SHOTS + " posições!");
-		}
-
 		this.fireShots(shots);
-
 		return Game.jsonShots(shots);
 	}
 
@@ -493,10 +513,10 @@ public class Game implements IGame
 	}
 
 	public void over() {
-			System.out.println();
-			System.out.println("+--------------------------------------------------------------+");
-			System.out.println("| Maldito sejas, Java Sparrow, eu voltarei, glub glub glub ... |");
-			System.out.println("+--------------------------------------------------------------+");
+		System.out.println();
+		System.out.println("+--------------------------------------------------------------+");
+		System.out.println("| Maldito sejas, Java Sparrow, eu voltarei, glub glub glub ... |");
+		System.out.println("+--------------------------------------------------------------+");
 	}
 	/**
 	 * Declara o vencedor, imprime uma mensagem na consola e cria um ficheiro PDF
@@ -562,6 +582,33 @@ public class Game implements IGame
 			System.err.println("Erro ao criar/atualizar o ficheiro pdf: " + e.getMessage());
 		}
 	}
+
+	public List<String> convertJsonToClassicFormat(String jsonRajada) {
+		List<String> coordenadasClassicas = new ArrayList<>();
+
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			List<Map<String, Object>> tiros = mapper.readValue(
+					jsonRajada,
+					new TypeReference<List<Map<String, Object>>>() {}
+			);
+
+			for (Map<String, Object> tiro : tiros) {
+				String row = String.valueOf(tiro.get("row")).trim();
+				String col = String.valueOf(tiro.get("column")).trim();
+
+				if (col.endsWith(".0")) {
+					col = col.replace(".0", "");
+				}
+
+				coordenadasClassicas.add(row + col);
+			}
+		} catch (Exception e) {
+			System.err.println("Erro ao traduzir o JSON: " + e.getMessage());
+		}
+
+		return coordenadasClassicas;
+	}
 	/**
 	 * Verifica se o jogo terminou
 	 *
@@ -572,3 +619,4 @@ public class Game implements IGame
 		return this.gameOver;
 	}
 }
+
