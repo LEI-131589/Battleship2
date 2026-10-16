@@ -315,60 +315,107 @@ public class Game implements IGame
 	 *                                  required number of shots (NUMBER_SHOTS).
 	 */
 	public String readEnemyFire(Scanner in) {
-		List<IPosition> shots = new ArrayList<>();
-
-		String linha = in.nextLine().trim();
-
-		while (linha.isEmpty() && in.hasNextLine()) {
-			linha = in.nextLine().trim();
+		if (this.gameOver) {
+			System.out.println("O jogo já acabou. Não é possível realizar mais jogadas.");
+			return "{}";
 		}
 
-		if (linha.contains("[")) {
-			StringBuilder jsonBuilder = new StringBuilder();
-			jsonBuilder.append(linha).append("\n");
+		while (true) {
+			try {
+				if (!in.hasNextLine()) {
+					return "{}";
+				}
 
-			while (!linha.contains("]")) {
-				linha = in.nextLine();
-				jsonBuilder.append(linha).append("\n");
-			}
+				String linha = in.nextLine().trim();
 
-			List<String> coordsTraduzidas = convertJsonToClassicFormat(jsonBuilder.toString());
-			for (String coord : coordsTraduzidas) {
-				Scanner tiroScanner = new Scanner(coord + "\n");
-				shots.add(Tasks.readClassicPosition(tiroScanner));
-			}
-		}
-		else {
-			if (this.gameOver) {
-				System.out.println("O jogo já acabou. Não é possível realizar mais jogadas.");
-				return "{}";
-			}
+				while (linha.isEmpty() && in.hasNextLine()) {
+					linha = in.nextLine().trim();
+				}
 
-			Scanner inputScanner = new Scanner(linha);
+				if (linha.isEmpty()) {
+					return "{}";
+				}
 
-			while (shots.size() < NUMBER_SHOTS && inputScanner.hasNext()) {
-				String token = inputScanner.next();
+				// Remove o prefixo "rajada" caso exista
+				String linhaLimpa = linha;
+				if (linhaLimpa.toLowerCase().startsWith("rajada")) {
+					linhaLimpa = linhaLimpa.substring(6).trim();
+				}
 
-				if (token.matches("[A-Za-z]")) {
-					if (inputScanner.hasNextInt()) {
-						int row = inputScanner.nextInt();
-						shots.add(new Position(token.toUpperCase().charAt(0), row));
-					} else {
-						throw new IllegalArgumentException("Posição incompleta! A coluna '" + token + "' não é seguida por uma linha.");
+				List<IPosition> shots = new ArrayList<>();
+
+				// Deteção de JSON: verifica se começa por '[' ou '{' ou se contém os campos "row"/"column"
+				boolean isJson = linhaLimpa.startsWith("[")
+						|| linhaLimpa.startsWith("{")
+						|| linhaLimpa.contains("\"row\"")
+						|| linhaLimpa.contains("\"column\"")
+						|| linhaLimpa.contains("'row'")
+						|| linhaLimpa.contains("'column'");
+
+				if (isJson) {
+					StringBuilder jsonBuilder = new StringBuilder();
+
+					if (!linhaLimpa.startsWith("[")) {
+						jsonBuilder.append("[\n");
+					}
+
+					jsonBuilder.append(linhaLimpa).append("\n");
+
+					// Lê as linhas seguintes até encontrar o fecho do array ']'
+					while (!linhaLimpa.contains("]") && in.hasNextLine()) {
+						linha = in.nextLine();
+						linhaLimpa = linha.trim();
+						jsonBuilder.append(linha).append("\n");
+					}
+
+					String jsonText = jsonBuilder.toString().trim();
+					if (!jsonText.endsWith("]")) {
+						jsonText += "\n]";
+					}
+
+					List<String> coordsTraduzidas = convertJsonToClassicFormat(jsonText);
+					for (String coord : coordsTraduzidas) {
+						Scanner tiroScanner = new Scanner(coord + "\n");
+						shots.add(Tasks.readClassicPosition(tiroScanner));
 					}
 				} else {
-					Scanner singleScanner = new Scanner(token);
-					shots.add(Tasks.readClassicPosition(singleScanner));
-				}
-			}
+					// Limpa aspas simples e duplas no formato clássico (ex: 'A3' -> A3)
+					linhaLimpa = linhaLimpa.replace("'", "").replace("\"", "");
 
-			if (shots.size() != NUMBER_SHOTS) {
-				throw new IllegalArgumentException("Você deve inserir exatamente " + NUMBER_SHOTS + " posições!");
+					Scanner inputScanner = new Scanner(linhaLimpa);
+
+					while (shots.size() < NUMBER_SHOTS && inputScanner.hasNext()) {
+						String token = inputScanner.next();
+
+						if (token.matches("[A-Za-z]")) {
+							if (inputScanner.hasNextInt()) {
+								int row = inputScanner.nextInt();
+								shots.add(new Position(token.toUpperCase().charAt(0), row));
+							} else {
+								throw new IllegalArgumentException("Posição incompleta! A coluna '" + token + "' não é seguida por uma linha.");
+							}
+						} else {
+							Scanner singleScanner = new Scanner(token);
+							shots.add(Tasks.readClassicPosition(singleScanner));
+						}
+					}
+				}
+
+				if (shots.size() != NUMBER_SHOTS) {
+					throw new IllegalArgumentException("Você deve inserir exatamente " + NUMBER_SHOTS + " posições!");
+				}
+
+				this.fireShots(shots);
+				return Game.jsonShots(shots);
+
+			} catch (IllegalArgumentException e) {
+				System.out.println("\n-> Entrada inválida: " + e.getMessage());
+				System.out.println("-> A jogada não foi contabilizada. Introduza a jogada novamente:\n");
+			} catch (Exception e) {
+				System.out.println("\n-> Erro ao processar a entrada: " + e.getMessage());
+				System.out.println("-> A jogada não foi contabilizada. Introduza a jogada novamente:\n");
 			}
 		}
-
-		this.fireShots(shots);
-		return Game.jsonShots(shots);
 	}
 
 	/**
@@ -550,7 +597,10 @@ public class Game implements IGame
 			StringBuilder conteudoAcumulado = new StringBuilder();
 
 			if (file.exists()) {
-				PdfReader reader = new PdfReader(fileName);
+
+				byte[] fileBytes = java.nio.file.Files.readAllBytes(file.toPath());
+
+				PdfReader reader = new PdfReader(fileBytes);
 				PdfTextExtractor extractor = new PdfTextExtractor(reader);
 
 				for (int i = 1; i <= reader.getNumberOfPages(); i++) {
@@ -594,6 +644,11 @@ public class Game implements IGame
 			);
 
 			for (Map<String, Object> tiro : tiros) {
+
+				if (tiro.get("row") == null || tiro.get("column") == null) {
+					throw new IllegalArgumentException("O JSON deve conter os campos 'row' e 'column'.");
+				}
+
 				String row = String.valueOf(tiro.get("row")).trim();
 				String col = String.valueOf(tiro.get("column")).trim();
 
@@ -604,7 +659,7 @@ public class Game implements IGame
 				coordenadasClassicas.add(row + col);
 			}
 		} catch (Exception e) {
-			System.err.println("Erro ao traduzir o JSON: " + e.getMessage());
+			throw new IllegalArgumentException("Erro na estrutura do JSON: " + e.getMessage(), e);
 		}
 
 		return coordenadasClassicas;

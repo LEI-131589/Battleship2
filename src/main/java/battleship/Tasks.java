@@ -15,6 +15,17 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 /**
  * The type Tasks.
  */
@@ -271,8 +282,7 @@ public class Tasks {
 		}
 	}
 
-
-// -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 	// LÓGICA DE GRAVAÇÃO E CARREGAMENTO
 	// -------------------------------------------------------------------------
 
