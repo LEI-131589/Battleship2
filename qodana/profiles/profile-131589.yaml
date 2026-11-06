@@ -1,0 +1,7 @@
+name: GodClassProfile
+base: empty
+inspections:
+  - inspection: OverlyComplexClass
+    enabled: true
+    options:
+      m_limit: 47
