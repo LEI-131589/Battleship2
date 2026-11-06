@@ -3,6 +3,8 @@ profile:
   base:
     name: empty
   inspections:
+    - group: All
+      enabled: false
     - inspection: ParametersPerMethod
       enabled: true
       options:
