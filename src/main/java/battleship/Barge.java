@@ -27,6 +27,5 @@ public class Barge extends Ship {
 		getPositions().add(new Position(pos.getRow(), pos.getColumn()));
 	}
 	public void metodoComCodeSmell(int p1, int p2, int p3, int p4, int p5, int p6) {
-		System.out.println("Este método tem 6 parâmetros, o Qodana deve detetar o code smell (Long Parameter List)!");
 	}
 }

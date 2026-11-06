@@ -19,6 +19,6 @@ jobs:
           fetch-depth: 0
       - uses: JetBrains/qodana-action@v2025.3
         with:
-          args: --config qodana-129846.yaml
+          args: "--config qodana-129846.yaml -l jetbrains/qodana-jvm-community"
           use-annotations: true
           post-pr-comment: true
