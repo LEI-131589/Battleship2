@@ -1,9 +1,10 @@
+#131589 Gonçalo Gonçalves
 name: Qodana smell gate 131589
 
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -20,7 +21,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Qodana Code Analysis
+      - name: "Qodana Code Analysis"
         uses: JetBrains/qodana-action@v2026.2
         with:
           args: --config qodana-131589.yaml
