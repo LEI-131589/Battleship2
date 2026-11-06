@@ -13,11 +13,7 @@ profile:
 #  - name: <SomeEnabledInspectionId>
 
 # Ativação da inspeção do Long Method para o teu elemento do grupo
-include:
-  - name: OverlyLongMethod
-    severity: WARNING
-    options:
-      m_limit: 30 # Limite de linhas a partir do qual um método é considerado "Long Method"
+
 
 #Disable inspections
 #exclude:
