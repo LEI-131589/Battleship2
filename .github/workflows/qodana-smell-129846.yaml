@@ -18,6 +18,15 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
+      - name: Debug - Listar estrutura de pastas
+        run: |
+          echo "=== Diretório atual ==="
+          pwd
+          echo "=== Ficheiros na raiz ==="
+          ls -la
+          echo "=== Procurar todos os ficheiros YAML ==="
+          find . -name "*.yaml"
+
       - uses: JetBrains/qodana-action@v2026.2
         with:
           args: --config qodana-129846.yaml
