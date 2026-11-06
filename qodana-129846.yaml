@@ -1,6 +1,6 @@
 #129846 Inês Marchante
 version: "1.0"
-linter: jetbrains/qodana-jvm-community:2026.2
+linter: qodana-jvm-community
 projectJDK: "23"
 profile:
   path: qodana/profiles/profile-129846.yaml
