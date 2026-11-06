@@ -1,0 +1,9 @@
+#129866 Maria Inês Rodrigues
+name: LongMethodProfile
+inspections:
+  - inspection: OverlyLongMethod
+    enabled: true
+    severity: WARNING
+    options:
+      m_limit: 30
+
