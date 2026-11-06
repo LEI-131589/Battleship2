@@ -17,6 +17,13 @@ Grupo TP05_LEI-6
 | Engenharia Informática | 129866 | Maria Inês Rodrigues | LEI-129866 e ist109721
 | Engenharia Informática | 131589 | Gonçalo Gonçalves | LEI-131589 e mambogamer13
 
+---
+## Guião 3 - Tarefa 2 (passo 4)
+
+| Cheiro (Fowler) | Inspeção no IDE | ID da inspeção | Métrica / limiar | Limitações |
+| :--- | :--- | :--- | :--- | :--- |
+| **Long Parameter List** | `Method with too many parameters` | `ParametersPerMethod` | PAR (ou NOPM) / 5 | A inspeção impõe um valor-limite absoluto e estático (ex.: 5 parâmetros), não suportando o cálculo de limiares estatísticos relativos à base de código atual (baseados em médias e desvios-padrão), conforme o livro sugere. Adicionalmente, a regra não efetua análise semântica para avaliar se os parâmetros possuem coesão lógica para serem encapsulados através da refabricação Parameter Object. |
+
 Demonstração: https://youtu.be/OL3Z1zM_yhc
 ---
 
@@ -108,7 +115,7 @@ public class Ship {
 ### Design Patterns Used:
 - **Strategy Pattern:** For different AI difficulty levels.
 - **Observer Pattern:** To update the UI when a ship is hit.
-</details>
+
 
 ### Logic Flow
 ```mermaid
