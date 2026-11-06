@@ -1,0 +1,9 @@
+#129846 Inês Marchante
+profile:
+  base:
+    name: empty
+  inspections:
+    - inspection: MethodWithTooManyParameters
+      enabled: true
+      options:
+        m_limit: 5
