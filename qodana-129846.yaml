@@ -1,7 +1,7 @@
 #129846 Inês Marchante
 version: "1.0"
 linter: qodana-jvm-community
-projectJDK: "17" 
+projectJDK: "23"
 profile:
   path: qodana/profiles/profile-129846.yaml
 failureConditions:
