@@ -1,3 +1,4 @@
+#129866 Maria Inês Rodrigues
 name: LongMethodProfile
 inspections:
   - inspection: OverlyLongMethod
