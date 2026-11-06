@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * The type Barge represents a ship with a size of 1 unit.
  * It is positioned on the game board based on its bearing and initial position.
- *
  * Author: britoeabreu
  * Date: 2023-10-10
  * Time: 15:30
@@ -27,7 +26,6 @@ public class Barge extends Ship {
 		// Add the single position of the barge to the list of positions
 		getPositions().add(new Position(pos.getRow(), pos.getColumn()));
 
-		/** Chamada do metodo adicionado */
 		this.valorSomaCodeSmell = metodoConCodeSmell(1, 2, 3, 4, 5, 6);
 	}
 	public int metodoConCodeSmell(int p1, int p2, int p3, int p4, int p5, int p6) {
