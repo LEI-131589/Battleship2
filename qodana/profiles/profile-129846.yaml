@@ -1,9 +1,8 @@
 #129846 Inês Lage Marchante
-profile:
-  name: "129846-profile"
-  base: "empty"
-  inspections:
-    - inspection: ParametersPerMethod
-      enabled: true
-      options:
-        m_limit: 5
+name: "129846-profile"
+base: "empty"
+inspections:
+  - inspection: ParametersPerMethod
+    enabled: true
+    options:
+      m_limit: 5
