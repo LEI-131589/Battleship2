@@ -1,5 +1,6 @@
 #129846 Inês Lage Marchante
 profile:
+  name: custom-profile
   base:
     name: empty
   inspections:
