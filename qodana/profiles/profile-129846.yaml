@@ -1,7 +1,8 @@
 #129846 Inês Lage Marchante
 name: "129846-profile"
-base: "empty"
 inspections:
+  - group: All
+    enabled: false
   - inspection: ParametersPerMethod
     enabled: true
     options:
