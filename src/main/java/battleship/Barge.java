@@ -28,8 +28,7 @@ public class Barge extends Ship {
 
 		metodoConCodeSmell(1, 2, 3, 4, 5, 6);
 	}
-	public void metodoComCodeSmell(int p1, int p2, int p3, int p4, int p5, int p6) {
-		int soma = p1 + p2 + p3 + p4 + p5 + p6;
-		System.out.println(soma);
+	public int metodoConCodeSmell(int p1, int p2, int p3, int p4, int p5, int p6) {
+		return p1 + p2 + p3 + p4 + p5 + p6;
 	}
 }
