@@ -1,14 +1,14 @@
 #129846 Inês Lage Marchante
 name: Qodana Long Parameter List Gate 129846
-
 on:
+  pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
-
 permissions:
   contents: read
   checks: write
   pull-requests: write
-
 jobs:
   qodana:
     runs-on: ubuntu-latest
@@ -17,16 +17,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-
-      - name: Debug - Listar estrutura de pastas
-        run: |
-          echo "=== Diretório atual ==="
-          pwd
-          echo "=== Ficheiros na raiz ==="
-          ls -la
-          echo "=== Procurar todos os ficheiros YAML ==="
-          find . -name "*.yaml"
-
       - uses: JetBrains/qodana-action@v2026.2
         with:
           args: --config qodana-129846.yaml

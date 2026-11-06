@@ -1,12 +1,10 @@
 #129846 Inês Lage Marchante
+#129846 Inês Lage Marchante
 profile:
-  name: custom-profile
   base:
     name: empty
   inspections:
-    - group: All
-      enabled: false
     - inspection: ParametersPerMethod
       enabled: true
       options:
-        "Parameter limit": 5
+        m_limit: 5
