@@ -12,12 +12,11 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v4
 
-      - name: Verificar Convenções de Nomes (Checkstyle)
-        uses: reviewdog/action-checkstyle@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          checkstyle_config: checkstyle-129846.xml
-          reporter: github-pr-review
-          level: error
-          fail_on_error: true
-          filter_mode: nofilter
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run Checkstyle via Maven
+        run: mvn checkstyle:check
