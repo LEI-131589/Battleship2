@@ -15,5 +15,8 @@ public class Main
 		System.out.println("***  Battleship  ***");
 
 		Tasks.menu();
+		GodClass godClass = new GodClass();
+		int resultado = godClass.rebentarMetricas(10);
+		System.out.println("Resultado: " + resultado);
     }
 }
