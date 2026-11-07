@@ -214,68 +214,7 @@ public class Game implements IGame
 		this.countRepeatedShots = 0;
 		this.countHits = 0;
 		this.countSinks = 0;
-
-		int complexidadeFalsa = calcularComplexidadeAbsurdaDoJogo(10, 20);
-		System.out.println("Jogo iniciado com fator de complexidade IA: " + complexidadeFalsa);
 	}
-
-	public int calcularComplexidadeAbsurdaDoJogo(int a, int b) {
-		int result = a + b;
-
-		if (result % 2 == 0) result++;
-		if (result % 3 == 0) result++;
-		if (result % 4 == 0) result++;
-		if (result % 5 == 0) result++;
-		if (result % 6 == 0) result++;
-		if (result % 7 == 0) result++;
-		if (result % 8 == 0) result++;
-		if (result % 9 == 0) result++;
-		if (result % 10 == 0) result++;
-		if (result % 11 == 0) result++;
-		if (result % 12 == 0) result++;
-		if (result % 13 == 0) result++;
-		if (result % 14 == 0) result++;
-		if (result % 15 == 0) result++;
-		if (result % 16 == 0) result++;
-		if (result % 17 == 0) result++;
-		if (result % 18 == 0) result++;
-		if (result % 19 == 0) result++;
-		if (result % 20 == 0) result++;
-		if (result % 21 == 0) result++;
-		if (result % 22 == 0) result++;
-		if (result % 23 == 0) result++;
-		if (result % 24 == 0) result++;
-		if (result % 25 == 0) result++;
-		if (result % 26 == 0) result++;
-		if (result % 27 == 0) result++;
-		if (result % 28 == 0) result++;
-		if (result % 29 == 0) result++;
-		if (result % 30 == 0) result++;
-		if (result % 31 == 0) result++;
-		if (result % 32 == 0) result++;
-		if (result % 33 == 0) result++;
-		if (result % 34 == 0) result++;
-		if (result % 35 == 0) result++;
-		if (result % 36 == 0) result++;
-		if (result % 37 == 0) result++;
-		if (result % 38 == 0) result++;
-		if (result % 39 == 0) result++;
-		if (result % 40 == 0) result++;
-		if (result % 41 == 0) result++;
-		if (result % 42 == 0) result++;
-		if (result % 43 == 0) result++;
-		if (result % 44 == 0) result++;
-		if (result % 45 == 0) result++;
-		if (result % 46 == 0) result++;
-		if (result % 47 == 0) result++;
-		if (result % 48 == 0) result++;
-		if (result % 49 == 0) result++;
-		if (result % 50 == 0) result++;
-		if (result % 51 == 0) result++;
-
-		return result;
-	}
-
 
 	@Override
 	public IFleet getMyFleet()
