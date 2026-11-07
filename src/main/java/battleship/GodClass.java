@@ -1,91 +1,145 @@
 package battleship;
+
 public class GodClass {
 
     // 1. VIOLA O LIMITE DE ATRIBUTOS (7 atributos > Limite de 5)
     private String nome;
-    private String morada;
-    private String email;
-    private int telefone;
-    private int nif;
+    private String categoria;
+    private int estado;
+    private int nivel;
+    private int pontos;
     private double saldo;
     private boolean ativo;
 
-    // Construtor (conta como método)
+    // Construtor (Complexidade = 1)
     public GodClass() {
-        this.nome = "Sistema";
-        this.morada = "Rua A";
-        this.email = "a@a.com";
-        this.telefone = 999;
-        this.nif = 111;
+        this.nome = "Desconhecido";
+        this.categoria = "Inicial";
+        this.estado = 0;
+        this.nivel = 1;
+        this.pontos = 0;
         this.saldo = 0.0;
         this.ativo = true;
     }
 
-    // 2. VIOLA O LIMITE DE MÉTODOS (7 métodos > Limite de 5)
-    // Além disso, estes métodos alteram o estado, evitando "Field may be final"
-    public void atualizarDados(String novoNome, String novaMorada) {
-        this.nome = novoNome;
-        this.morada = novaMorada;
-        System.out.println("Dados: " + this.nome + " na " + this.morada);
+    // 2. Método com Complexidade ~8
+    public void processarNivel(int iteracoes) {
+        this.nivel++;
+        for (int i = 0; i < iteracoes; i++) {
+            if (i % 2 == 0) {
+                this.estado += 1;
+            } else if (i % 3 == 0) {
+                this.estado += 2;
+            } else if (i % 5 == 0) {
+                this.estado += 3;
+            } else if (i % 7 == 0) {
+                this.estado += 4;
+            } else {
+                this.estado += 5;
+            }
+        }
+        if (this.estado > 100) this.estado = 0;
+        if (this.nivel > 10) this.nivel = 1;
     }
 
-    public void atualizarContactos(String novoEmail, int novoTelefone) {
-        this.email = novoEmail;
-        this.telefone = novoTelefone;
-        System.out.println("Contactos: " + this.email + " - " + this.telefone);
+    // 3. Método com Complexidade ~17 (O grande responsável pelo volume, espalhado por 'cases')
+    public void calcularPontuacao(int base) {
+        this.pontos += base;
+        switch (base) {
+            case 1: this.pontos += 10; break;
+            case 2: this.pontos += 20; break;
+            case 3: this.pontos += 30; break;
+            case 4: this.pontos += 40; break;
+            case 5: this.pontos += 50; break;
+            case 6: this.pontos += 60; break;
+            case 7: this.pontos += 70; break;
+            case 8: this.pontos += 80; break;
+            case 9: this.pontos += 90; break;
+            case 10: this.pontos += 100; break;
+            case 11: this.pontos += 110; break;
+            case 12: this.pontos += 120; break;
+            case 13: this.pontos += 130; break;
+            case 14: this.pontos += 140; break;
+            default: this.pontos += 5; break;
+        }
+        if (this.pontos > 1000) {
+            this.pontos = 1000;
+        } else if (this.pontos < 0) {
+            this.pontos = 0;
+        }
     }
 
-    public void faturar(int novoNif, double valorAcrescentar) {
-        this.nif = novoNif;
-        this.saldo += valorAcrescentar; // Lê e altera, impossibilitando "local variable"
-        System.out.println("NIF " + this.nif + " tem saldo de " + this.saldo);
+    // 4. Método com Complexidade ~11 (Devido aos && e ||)
+    public void avaliarCategoria(String tipo, boolean flag1, boolean flag2) {
+        this.categoria = tipo;
+        if (tipo != null && (flag1 || flag2)) {
+            this.nivel++;
+        } else if (tipo == null && !flag1 && !flag2) {
+            this.nivel--;
+        }
+
+        if (this.nivel > 5 || this.pontos > 500) {
+            this.categoria = "Premium";
+        } else if (this.nivel < 2 && this.pontos < 100) {
+            this.categoria = "Iniciante";
+        }
     }
 
-    public void alternarEstado() {
-        this.ativo = !this.ativo;
-        System.out.println("Estado ativo? " + this.ativo);
-    }
-
-    // 3. VIOLA O LIMITE DE COMPLEXIDADE (WMC > 13)
-    public void superMetodoComplexo(int valor) {
-        this.saldo += valor;
-
-        if (this.ativo) {
-            for (int i = 0; i < 10; i++) {
-                if (i % 2 == 0) {
-                    System.out.println("Par");
-                } else if (i % 3 == 0) {
-                    System.out.println("Multiplo 3");
-                } else {
-                    System.out.println("Outro");
+    // 5. Método com Complexidade ~7 (Ciclos aninhados)
+    public void atualizarSaldo(double delta) {
+        this.saldo += delta;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (i == j) {
+                    this.saldo += 1.0;
+                } else if (i > j) {
+                    this.saldo += 0.5;
                 }
             }
         }
-
-        if (valor > 100) {
-            switch (valor) {
-                case 101: System.out.println("1"); break;
-                case 102: System.out.println("2"); break;
-                case 103: System.out.println("3"); break;
-                case 104: System.out.println("4"); break;
-                case 105: System.out.println("5"); break;
-                case 106: System.out.println("6"); break;
-                case 107: System.out.println("7"); break;
-                case 108: System.out.println("8"); break;
-                case 109: System.out.println("9"); break;
-                case 110: System.out.println("10"); break;
-                default: System.out.println("Max"); break;
-            }
+        if (this.saldo < 0) {
+            this.saldo = 0;
+        } else if (this.saldo > 10000) {
+            this.saldo = 10000;
         }
     }
 
-    // O método Main força a utilização de tudo, evitando o warning de "Unused declaration"
+    // 6. Método com Complexidade ~9 (Mantém o WMC alto mas sem redundâncias lógicas)
+    public void validarEstadoAtivo(int verificacoes) {
+        this.ativo = verificacoes > 0;
+        int contador = 0;
+        while (contador < verificacoes) {
+
+            // Substitui "Ímpar" por "ValorDiferente" para evitar o Typo
+            if (contador % 2 == 0) {
+                this.nome = "ValorPar";
+            } else {
+                this.nome = "ValorDiferente";
+            }
+
+            // Lógica sem redundâncias (evita o "always true" e "already assigned")
+            if (this.ativo && this.saldo > 50.0) {
+                this.pontos += 1;
+            } else if (this.pontos < 5 && contador > 2) {
+                this.ativo = false;
+            } else if (contador == 5 || this.saldo < 0) {
+                this.pontos -= 1;
+            }
+
+            contador++;
+        }
+    }
+
+    // O método main força a utilização de tudo, evitando warnings de "unused" (Complexidade = 1)
     public static void main(String[] args) {
         GodClass gc = new GodClass();
-        gc.atualizarDados("Novo Sistema", "Rua B");
-        gc.atualizarContactos("b@b.com", 123456);
-        gc.faturar(999999, 10.50);
-        gc.alternarEstado();
-        gc.superMetodoComplexo(105);
+        gc.processarNivel(10);
+        gc.calcularPontuacao(5);
+        gc.avaliarCategoria("Especial", true, false);
+        gc.atualizarSaldo(50.5);
+        gc.validarEstadoAtivo(3);
+
+        // Impressão apenas para justificar a existência dos dados na memória
+        System.out.println("Fim do processo para " + gc.nome + " da categoria " + gc.categoria);
     }
 }
