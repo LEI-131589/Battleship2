@@ -2,8 +2,8 @@ package battleship;
 
 public class JogoGodClass {
     // Mais de 15 atributos (viola ClassWithTooManyFields)
-    private String jogador1;
-    private String jogador2;
+    final private String jogador1;
+    final private String jogador2;
     private int pontuacao1;
     private int pontuacao2;
     private boolean jogoAtivo;
@@ -13,12 +13,23 @@ public class JogoGodClass {
     private int maxNavios;
     private int naviosDestruidos1;
     private int naviosDestruidos2;
-    private boolean somAtivado;
-    private String resolucaoEcra;
-    private int tamanhoGrelhaX;
-    private int tamanhoGrelhaY;
+    final private boolean somAtivado;
+    final private String resolucaoEcra;
+    final private int tamanhoGrelhaX;
+    final private int tamanhoGrelhaY;
     private String ultimoMovimento;
-    private boolean modoCheats;
+    final private boolean modoCheats;
+
+    public JogoGodClass() {
+        this.jogador1 = "Jogador 1";
+        this.jogador2 = "Jogador 2";
+        this.somAtivado = true;
+        this.resolucaoEcra = "1920x1080";
+        this.tamanhoGrelhaX = 10;
+        this.tamanhoGrelhaY = 10;
+        this.modoCheats = false;
+        this.dificuldade = "Normal";
+    }
 
     // Mais de 15 métodos (viola ClassWithTooManyMethods e possivelmente OverlyComplexClass)
     public void iniciarJogo() {
@@ -116,7 +127,7 @@ public class JogoGodClass {
         System.out.println("A renderizar a interface gráfica na resolução: " + this.resolucaoEcra);
         System.out.println("Grelha atual configurada para: " + this.tamanhoGrelhaX + "x" + this.tamanhoGrelhaY);
         // Aproveitamos o método toString já existente na classe para imprimir o tabuleiro base
-        System.out.println(this.toString());
+        System.out.println(this);
     }
 
     public void reproduzirSomTiro() {
