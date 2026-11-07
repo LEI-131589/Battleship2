@@ -10,8 +10,8 @@ inspections:
   - inspection: ClassWithTooManyMethods
     enabled: true
     options:
-      limit: 15 # Limite para Number of Methods (NOM)
+      m_limit: 15 # Limite para Number of Methods (NOM)
   - inspection: ClassWithTooManyFields
     enabled: true
     options:
-      limit: 15 # Limite para Number of Attributes (NOA)
+      m_limit: 15 # Limite para Number of Attributes (NOA)
