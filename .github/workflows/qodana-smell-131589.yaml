@@ -1,5 +1,5 @@
 #131589 Gonçalo Gonçalves
-name: Qodana smell gate 131589
+name: "Qodana smell gate 131589"
 
 on:
   pull_request:
