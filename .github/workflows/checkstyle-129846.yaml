@@ -1,0 +1,22 @@
+# 129846 Inês Marchante
+name: "Checkstyle Quality Gate"
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  checkstyle-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+      
+      - name: Verificar Convenções de Nomes (Checkstyle)
+        uses: reviewdog/action-checkstyle@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          checkstyle_config: checkstyle-129846.xml
+          fail_on_error: true
+          reporter: github-pr-check
+          level: error
