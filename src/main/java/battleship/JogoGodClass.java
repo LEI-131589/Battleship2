@@ -126,7 +126,6 @@ public class JogoGodClass {
     public void desenharTabuleiro() {
         System.out.println("A renderizar a interface gráfica na resolução: " + this.resolucaoEcra);
         System.out.println("Grelha atual configurada para: " + this.tamanhoGrelhaX + "x" + this.tamanhoGrelhaY);
-        // Aproveitamos o método toString já existente na classe para imprimir o tabuleiro base
         System.out.println(this);
     }
 
