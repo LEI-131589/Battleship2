@@ -6,10 +6,6 @@ base:
   name: qodana.recommended
 
 inspections:
-  - inspection: OverlyComplexClass
-    enabled: true
-    options:
-      m_limit: 47
 
   - inspection: ClassWithTooManyMethods
     enabled: true

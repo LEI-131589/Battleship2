@@ -92,6 +92,7 @@ public class GodClass {
             case 12: this.pontos += 120; break;
             case 13: this.pontos += 130; break;
             case 14: this.pontos += 140; break;
+            case 15: this.pontos += 150; break;
             default: this.pontos += 5; break;
         }
 
