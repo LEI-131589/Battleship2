@@ -3,6 +3,26 @@ version: "1.0"
 profile:
   name: qodana.starter
 
-projectJDK: "23"
+#Enable inspections
+#include:
+#  - name: <SomeEnabledInspectionId>
 
+# Ativação da inspeção do Long Method para o teu elemento do grupo
+
+#Disable inspections
+#exclude:
+#  - name: <SomeDisabledInspectionId>
+#    paths:
+#      - <path/where/not/run/inspection>
+
+projectJDK: "23" #(Applied in CI/CD pipeline)
+
+#Execute shell command before Qodana execution (Applied in CI/CD pipeline)
+#bootstrap: sh ./prepare-qodana.sh
+
+#Install IDE plugins before Qodana execution (Applied in CI/CD pipeline)
+#plugins:
+#  - id: <plugin.id> #(plugin id can be found at https://plugins.jetbrains.com)
+
+#Specify Qodana linter for analysis (Applied in CI/CD pipeline)
 linter: qodana-jvm-community
