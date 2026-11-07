@@ -199,7 +199,7 @@ public class JogoGodClass {
         System.out.println("\n--- Resumo da Partida ---");
         System.out.println(this.jogador1 + ": " + this.pontuacao1 + " pts (" + this.naviosDestruidos1 + " navios afundados)");
         System.out.println(this.jogador2 + ": " + this.pontuacao2 + " pts (" + this.naviosDestruidos2 + " navios afundados)");
-        System.out.println("=================================");
+        System.out.println("==================================");
     }
 
     @Override
