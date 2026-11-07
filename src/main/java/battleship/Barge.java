@@ -26,10 +26,10 @@ public class Barge extends Ship {
 		// Add the single position of the barge to the list of positions
 		getPositions().add(new Position(pos.getRow(), pos.getColumn()));
 
-		this.valorSomaCodeSmell = metodoConCodeSmell(1, 2, 3, 4, 5, 6);
+		this.valorSomaCodeSmell = metodoConCodeSmell(1, 2, 3, 4);
 	}
-	public int metodoConCodeSmell(int p1, int p2, int p3, int p4, int p5, int p6) {
-		return p1 + p2 + p3 + p4 + p5 + p6;
+	public int metodoConCodeSmell(int p1, int p2, int p3, int p4) {
+		return p1 + p2 + p3 + p4 ;
 	}
 
 }
