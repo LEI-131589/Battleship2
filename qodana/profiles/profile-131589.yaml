@@ -1,5 +1,4 @@
 name: "God Class Profile"
-baseProfile: empty
 inspections:
   - inspection: OverlyComplexClass
     enabled: true
