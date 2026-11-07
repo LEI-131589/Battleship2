@@ -7,11 +7,3 @@ inspections:
     enabled: true
     options:
       m_limit: 13
-  - inspection: ClassWithTooManyMethods
-    enabled: true
-    options:
-      m_limit: 5
-  - inspection: ClassWithTooManyFields
-    enabled: true
-    options:
-      m_limit: 5
