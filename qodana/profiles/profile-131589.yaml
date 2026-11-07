@@ -6,12 +6,12 @@ inspections:
   - inspection: OverlyComplexClass
     enabled: true
     options:
-      m_limit: 13 # Limite de Weighted Methods per Class (WMC)
+      m_limit: 13
   - inspection: ClassWithTooManyMethods
     enabled: true
     options:
-      m_limit: 5 # Limite para Number of Methods (NOM)
+      limit: 5
   - inspection: ClassWithTooManyFields
     enabled: true
     options:
-      m_limit: 5 # Limite para Number of Attributes (NOA)
+      limit: 5
