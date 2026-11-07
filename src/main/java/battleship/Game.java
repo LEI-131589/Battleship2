@@ -674,7 +674,7 @@ public class Game implements IGame
 		return this.gameOver;
 	}
 
-	public void MetodoComMaiusculaInvalido129866() {
+	public void metodoValido129866() {
 		System.out.println("Teste Checkstyle");
 	}
 }
