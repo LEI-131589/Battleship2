@@ -75,6 +75,7 @@ public class GodClass {
                 case 109: System.out.println("Opção 109 acionada"); break;
                 case 110: System.out.println("Opção 110 acionada"); break;
                 case 111: System.out.println("Opção 111 acionada"); break;
+                case 112: System.out.println("Opção 112 acionada"); break;
                 default: System.out.println("Valor limite superior acionado"); break;
             }
         }
