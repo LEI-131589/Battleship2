@@ -1,6 +1,6 @@
 #131589 Gonçalo Gonçalves
 version: "1.0"
-linter: qodana-jvm-community
+linter: jetbrains/qodana-jvm-community:2026.2
 projectJDK: "23"
 profile:
   path: qodana/profiles/profile-131589.yaml
