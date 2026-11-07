@@ -1,12 +1,11 @@
 name: "God Class Profile"
-base:
-  name: empty
+baseProfile: empty
 inspections:
   - inspection: OverlyComplexClass
     enabled: true
     severity: WARNING
     options:
-      m_limit: 44 # Limite de Weighted Methods per Class (WMC)
+      m_limit: 30 # Limite de Weighted Methods per Class (WMC)
   - inspection: ClassWithTooManyMethods
     severity: WARNING
     enabled: true
