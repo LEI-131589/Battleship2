@@ -4,13 +4,16 @@ base:
 inspections:
   - inspection: OverlyComplexClass
     enabled: true
+    severity: WARNING
     options:
       m_limit: 44 # Limite de Weighted Methods per Class (WMC)
   - inspection: ClassWithTooManyMethods
+    severity: WARNING
     enabled: true
     options:
       limit: 15 # Limite para Number of Methods (NOM)
   - inspection: ClassWithTooManyFields
     enabled: true
+    severity: WARNING
     options:
       limit: 15 # Limite para Number of Attributes (NOA)
