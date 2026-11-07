@@ -12,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Barge extends Ship {
 
-	public int valorSomaCodeSmell;
+	@SuppressWarnings("unused")
+	final public int valorSomaCodeSmell;
 	/**
 	 * Instantiates a new Barge.
 	 *
@@ -29,7 +30,8 @@ public class Barge extends Ship {
 		this.valorSomaCodeSmell = metodoConCodeSmell(1, 2, 3, 4);
 	}
 	public int metodoConCodeSmell(int p1, int p2, int p3, int p4) {
-		return p1 + p2 + p3 + p4 ;
+		return p1 + p2 + p3 + p4;
+
 	}
 
 }
