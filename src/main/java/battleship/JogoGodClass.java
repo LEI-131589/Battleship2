@@ -212,16 +212,4 @@ public class JogoGodClass {
         System.out.println(this.jogador2 + ": " + this.pontuacao2 + " pts (" + this.naviosDestruidos2 + " navios afundados)");
         System.out.println("=================================");
     }
-
-    @Override
-    public String toString() {
-        StringBuilder tabuleiro = new StringBuilder();
-        tabuleiro.append("Tabuleiro Padrão (10x10):\n");
-        for (int i = 0; i < 10; i++) {
-            // Substitui o ciclo for interior por String.repeat()
-            tabuleiro.append("~ ".repeat(10));
-            tabuleiro.append("\n");
-        }
-        return tabuleiro.toString();
-    }
 }
