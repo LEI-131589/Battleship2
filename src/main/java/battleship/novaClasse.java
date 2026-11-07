@@ -1,5 +1,5 @@
 package battleship;
 
-//teste com falha v4
-public class novaClasse {
+//teste sem falha v1
+public class NovaClasse {
 }
