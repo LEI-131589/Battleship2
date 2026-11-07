@@ -18,12 +18,12 @@ Grupo TP05_LEI-6
 | Engenharia Informática | 131589 | Gonçalo Gonçalves | LEI-131589 e mambogamer13
 
 ---
-## Guião 3 - Tarefa 2 (passo 4)
 
-| Cheiro (Fowler) | Inspeção no IDE | ID da inspeção | Métrica / limiar | Limitações |
-| :--- | :--- | :--- | :--- | :--- |
-| **Long Parameter List** | `Method with too many parameters` | `ParametersPerMethod` | PAR (ou NOPM) / 5 | A inspeção impõe um valor-limite absoluto e estático (ex.: 5 parâmetros), não suportando o cálculo de limiares estatísticos relativos à base de código atual (baseados em médias e desvios-padrão), conforme o livro sugere. Adicionalmente, a regra não efetua análise semântica para avaliar se os parâmetros possuem coesão lógica para serem encapsulados através da refabricação Parameter Object. |
+## Tarefa 2 - parte A - passo 10: Bloqueio de Merge via Quality Gate
 
+Não foi possível configurar a regra de proteção do ramo main (Branch Protection) para bloquear automaticamente o botão de merge. Ao aceder à secção Settings do GitHub, verificou-se que a conta não possui os privilégios de administração necessários para esta funcionalidade ("You don't have access to repository options"), uma limitação imposta pelas permissões do repositório ou por se tratar de um repositório privado no plano Free do GitHub. Ainda assim, o Quality Gate encontra-se perfeitamente funcional, com o workflow da Action a falhar e a reportar os code smells de forma visível no Pull Request.
+
+---
 Demonstração: https://youtu.be/OL3Z1zM_yhc
 ---
 
