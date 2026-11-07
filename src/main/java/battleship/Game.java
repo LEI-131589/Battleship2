@@ -673,43 +673,5 @@ public class Game implements IGame
 	public boolean isGameOver() {
 		return this.gameOver;
 	}
-
-	public void provoacaSmellLongMethod129866() {
-		int x = 0;
-		if (x == 1) { x++; } else { x--; }
-		if (x == 2) { x++; } else { x--; }
-		if (x == 3) { x++; } else { x--; }
-		if (x == 4) { x++; } else { x--; }
-		if (x == 5) { x++; } else { x--; }
-		if (x == 6) { x++; } else { x--; }
-		if (x == 7) { x++; } else { x--; }
-		if (x == 8) { x++; } else { x--; }
-		if (x == 9) { x++; } else { x--; }
-		System.out.println("Linha 1 " + x);
-		System.out.println("Linha 2 " + x);
-		System.out.println("Linha 3 " + x);
-		System.out.println("Linha 4 " + x);
-		System.out.println("Linha 5 " + x);
-		System.out.println("Linha 6 " + x);
-		System.out.println("Linha 7 " + x);
-		System.out.println("Linha 8 " + x);
-		System.out.println("Linha 9 " + x);
-		System.out.println("Linha 10 " + x);
-		System.out.println("Linha 11 " + x);
-		System.out.println("Linha 12 " + x);
-		System.out.println("Linha 13 " + x);
-		System.out.println("Linha 14 " + x);
-		System.out.println("Linha 15 " + x);
-		System.out.println("Linha 16 " + x);
-		System.out.println("Linha 17 " + x);
-		System.out.println("Linha 18 " + x);
-		System.out.println("Linha 19 " + x);
-		System.out.println("Linha 20 " + x);
-		System.out.println("Linha 21 " + x);
-		System.out.println("Linha 22 " + x);
-		System.out.println("Linha 23 " + x);
-		System.out.println("Linha 24 " + x);
-		System.out.println("Linha 25 " + x);
-	}
 }
 
