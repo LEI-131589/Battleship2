@@ -45,7 +45,7 @@ public class JogoGodClass {
         tabuleiro.append("Tabuleiro Padrão (10x10):\n");
         for (int i = 0; i < 10; i++) {
             // Substitui o ciclo for interior por String.repeat()
-            tabuleiro.append("~ ".repeat(10));
+            tabuleiro.append("+ ".repeat(10));
             tabuleiro.append("\n");
         }
         return tabuleiro.toString();
