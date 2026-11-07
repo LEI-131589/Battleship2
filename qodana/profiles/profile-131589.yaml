@@ -5,14 +5,14 @@ inspections:
     enabled: true
     severity: WARNING
     options:
-      m_limit: 30 # Limite de Weighted Methods per Class (WMC)
+      m_limit: 10 # Limite de Weighted Methods per Class (WMC)
   - inspection: ClassWithTooManyMethods
     severity: WARNING
     enabled: true
     options:
-      m_limit: 15 # Limite para Number of Methods (NOM)
+      m_limit: 5 # Limite para Number of Methods (NOM)
   - inspection: ClassWithTooManyFields
     enabled: true
     severity: WARNING
     options:
-      m_limit: 15 # Limite para Number of Attributes (NOA)
+      m_limit: 5 # Limite para Number of Attributes (NOA)
