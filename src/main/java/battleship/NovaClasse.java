@@ -1,5 +1,5 @@
 package battleship;
 
-//teste sem falha v2
+//teste sem falha v3
 public class NovaClasse {
 }
