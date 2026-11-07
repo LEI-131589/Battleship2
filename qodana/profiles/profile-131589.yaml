@@ -1,7 +1,17 @@
-name: GodClassProfile
-base: empty
+# 131589 - Gonçalo Gonçalves
+name: "God Class Profile"
+base:
+  name: empty
 inspections:
   - inspection: OverlyComplexClass
     enabled: true
     options:
-      m_limit: 1
+      m_limit: 44 # Limite de Weighted Methods per Class (WMC)
+  - inspection: ClassWithTooManyMethods
+    enabled: true
+    options:
+      limit: 15 # Limite para Number of Methods (NOM)
+  - inspection: ClassWithTooManyFields
+    enabled: true
+    options:
+      limit: 15 # Limite para Number of Attributes (NOA)
