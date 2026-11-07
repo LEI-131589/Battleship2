@@ -4,4 +4,4 @@ inspections:
   - inspection: OverlyComplexClass
     enabled: true
     options:
-      m_limit: 47
+      m_limit: 1
