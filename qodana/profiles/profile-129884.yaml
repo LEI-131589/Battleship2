@@ -4,3 +4,11 @@ baseProfile: empty
 inspections:
   - inspection: PublicField
     enabled: true
+    severity: WARNING
+    options:
+      m_ignoreFieldsIfPackagePrivate: false
+  - inspection: ClassWithTooManyFields
+    enabled: true
+    severity: WARNING
+    options:
+      m_limit: 2
