@@ -1,10 +1,7 @@
 # 129884 Joana Pires
-name: profile-129884
+name: "Data Class Profile"
+base:
+  name: empty
 inspections:
-  - group: "Abstraction issues"
+  - inspection: PublicField
     enabled: true
-    inspections:
-      - inspection: FeatureEnvy
-        enabled: true
-        options:
-          m_limit: 1

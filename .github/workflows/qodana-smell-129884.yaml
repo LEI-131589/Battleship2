@@ -3,9 +3,9 @@ name: Qodana smell gate 129884
 
 on:
   pull_request:
-    branches: [ main, Teste-Feature-Envy ]
+    branches: [ main ]
   push:
-    branches: [ main, Teste-Feature-Envy ]
+    branches: [ main ]
   workflow_dispatch:
 
 concurrency:
