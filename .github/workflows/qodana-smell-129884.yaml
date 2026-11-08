@@ -3,9 +3,14 @@ name: Qodana smell gate 129884
 
 on:
   pull_request:
+    branches: [ main, Provocar-Data-Class ]
   push:
-    branches: [main]
+    branches: [ main, Provocar-Data-Class ]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
