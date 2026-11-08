@@ -18,24 +18,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Onde esta o ficheiro?
-        run: |
-          find . -name "GodClassEnorme.java"
-          find . -name "pom.xml" -not -path "./node_modules/*"
-
       - uses: JetBrains/qodana-action@v2026.2
         with:
-          args: --config qodana-131589.yaml --print-problems
-          pr-mode: false
-          upload-result: true
+          args: --config qodana-131589.yaml
           use-annotations: true
           post-pr-comment: true
-
-      - name: Diagnostico 5
-        if: always()
-        run: |
-          R="$RUNNER_TEMP/qodana/results"
-          grep -oE '"id": *"(ClassComplexity|FieldCount|MethodCount|CyclomaticComplexity)"' "$R/qodana.sarif.json" | sort -u
-          grep -E 'class="(ClassComplexity|FieldCount|MethodCount|CyclomaticComplexity)"' "$R/log/main.profile.xml" || true
-          
-
