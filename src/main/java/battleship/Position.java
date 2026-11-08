@@ -27,7 +27,7 @@ public class Position implements IPosition {
 	/**
 	 * Indicates whether the position is occupied by a ship.
 	 */
-	private boolean isOccupied;
+	private boolean isoccupied;
 
 	/**
 	 * Indicates whether the position has been hit by an attack.
@@ -45,7 +45,7 @@ public class Position implements IPosition {
 	public Position(char classicRow, int classicColumn) {
 		this.row = Character.toUpperCase(classicRow) - 'A';
 		this.column = classicColumn - 1;
-		this.isOccupied = false;
+		this.isoccupied = false;
 		this.isHit = false;
 	}
 
@@ -53,7 +53,7 @@ public class Position implements IPosition {
 	public Position(@JsonProperty("row") int row, @JsonProperty("column") int column) {
 		this.row = row;
 		this.column = column;
-		this.isOccupied = false;
+		this.isoccupied = false;
 		this.isHit = false;
 	}
 
@@ -112,7 +112,7 @@ public class Position implements IPosition {
 
 	@Override
 	public boolean isOccupied() {
-		return isOccupied;
+		return isoccupied;
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class Position implements IPosition {
 
 	@Override
 	public void occupy() {
-		isOccupied = true;
+		isoccupied = true;
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class Position implements IPosition {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(row, column, isOccupied, isHit);
+		return Objects.hash(row, column, isoccupied, isHit);
 	}
 
 	@Override
