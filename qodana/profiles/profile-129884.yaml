@@ -1,23 +1,11 @@
 # 129884 Joana Pires
 profile:
   base:
-    name: FeatureEnvyDetectionProfile
-    inspections:
-      # Inspeção principal de Feature Envy
-      - name: FeatureEnvy
-        enabled: true
-        severity: WARNING
-        option:
-          m_limit: 1
-
-      # Acoplamento de métodos para restringir FDP <= FEW (poucas classes externas)
-      - name: ClassCoupling
-        enabled: true
-        severity: WARNING
-        option:
-          m_threshold: 3
-          m_includeLibraryClasses: false
-
-      # Desativa inspeções irrelevantes para focar na deteção do Feature Envy
-      - name: JavaDoc
-        enabled: false
+    name: empty
+  inspections:
+    - inspection: FeatureEnvy
+      enabled: true
+    - inspection: CouplingIntensity
+      enabled: true
+      options:
+        m_limit: 7
