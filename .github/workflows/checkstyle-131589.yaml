@@ -1,25 +1,30 @@
 # 131589 - Gonçalo Gonçalves
-name: Checkstyle Gate 131589
+name: Checkstyle naming gate 131589
+
 on:
   pull_request:
-  push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [ "main" ]
+
 permissions:
   contents: read
   checks: write
   pull-requests: write
+
 jobs:
   checkstyle-131589:
+    name: Checkstyle (convenções de nomes)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
-      - name: Run Checkstyle
-        uses: reviewdog/action-checkstyle@v1
+      - uses: dbelyaev/action-checkstyle@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           checkstyle_config: checkstyle-131589.xml
           reporter: github-pr-check
           level: error
-          fail_on_error: true
+          fail_level: error
+          filter_mode: added

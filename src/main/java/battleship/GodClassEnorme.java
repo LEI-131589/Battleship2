@@ -9,6 +9,7 @@ public class GodClassEnorme {
     private double saldo;
     // Adicionado 'final' conforme o aviso
     private final boolean ativo;
+    public static final int MAX_SHIPSa = 10;
 
     public GodClassEnorme() {
         this.nome = "Desconhecido";
