@@ -2,6 +2,8 @@
 name: profile-129884
 baseProfile: empty
 inspections:
-  - inspection: DataClass
+  - inspection: PublicField
     enabled: true
     severity: WARNING
+    options:
+      IGNORE_ENUM_VALUES: true
