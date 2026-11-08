@@ -1,9 +1,10 @@
 # 129884 Joana Pires
-profile:
-  name: profile-129884
+name: profile-129884
 inspections:
-  - name: FeatureEnvy
+  - group: "Abstraction issues"
     enabled: true
-    severity: WARNING
-    option:
-      m_limit: 1
+    inspections:
+      - inspection: FeatureEnvy
+        enabled: true
+        options:
+          m_limit: 1
