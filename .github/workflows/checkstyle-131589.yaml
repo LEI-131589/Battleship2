@@ -1,0 +1,25 @@
+# 131589 - Gonçalo Gonçalves
+name: Checkstyle Gate 131589
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+jobs:
+  checkstyle-131589:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Checkstyle
+        uses: reviewdog/action-checkstyle@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          checkstyle_config: checkstyle-131589.xml
+          reporter: github-pr-check
+          level: error
+          fail_on_error: true
