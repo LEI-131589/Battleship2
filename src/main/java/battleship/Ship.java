@@ -439,5 +439,7 @@ public abstract class Ship implements IShip
     {
 	return "[" + category + " " + bearing + " " + pos + "]";
     }
-
+ public void Testeworkflow(){
+		System.out.print("Resultou");
+ }
 }
