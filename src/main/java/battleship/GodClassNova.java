@@ -1,7 +1,7 @@
 
 package battleship;
 
-public class GodClass {
+public class GodClassNova {
 
     // 12 atributos: ultrapassa o limite de 5
     private String nome;
@@ -17,7 +17,7 @@ public class GodClass {
     private double bonus;
     private String identificador;
 
-    public GodClass() {
+    public GodClassNova() {
         this.nome = "Desconhecido";
         this.categoria = "Inicial";
         this.estado = 0;
@@ -277,7 +277,7 @@ public class GodClass {
     }
 
     public static void main(String[] args) {
-        GodClass gc = executarGodClass();
+        GodClassNova gc = executarGodClass();
 
         // Lemos os valores para variáveis locais para evitar os avisos de "unused/never accessed"
         String d = gc.getDescricao();
@@ -291,8 +291,8 @@ public class GodClass {
         }
     }
 
-    private static GodClass executarGodClass() {
-        GodClass gc = new GodClass();
+    private static GodClassNova executarGodClass() {
+        GodClassNova gc = new GodClassNova();
         gc.processarNivel(10);
         gc.calcularPontuacao(5);
         gc.avaliarCategoria("Especial", true, false);
