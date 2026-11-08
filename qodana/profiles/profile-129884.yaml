@@ -1,11 +1,10 @@
 # 129884 Joana Pires
 profile:
   base:
-    name: empty
+  name: profile-129884
   inspections:
-    - inspection: FeatureEnvy
+    - name: FeatureEnvy
       enabled: true
-    - inspection: CouplingIntensity
-      enabled: true
-      options:
-        m_limit: 7
+      severity: WARNING
+      option:
+        m_limit: 1
