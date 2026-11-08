@@ -1,19 +1,32 @@
- # 129884 Joana Pires
+# 129884 - Joana Pires
 name: Checkstyle Quality Gate 129884
 
 on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 jobs:
   checkstyle-validation:
+    name: Checkstyle (convenções de nomes)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
       - name: Executar Checkstyle
-        uses: nikitasavchenko/checkstyle-action@v1.0.0
+        uses: dbelyaev/action-checkstyle@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           checkstyle_config: checkstyle-129884.xml
+          reporter: github-pr-check
+          level: error
+          fail_level: error
+          filter_mode: added
