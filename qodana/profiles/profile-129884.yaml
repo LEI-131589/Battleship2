@@ -2,6 +2,6 @@
 name: profile-129884
 baseProfile: empty
 inspections:
-  - inspection: PublicField
+  - inspection: DataClass
     enabled: true
     severity: WARNING
