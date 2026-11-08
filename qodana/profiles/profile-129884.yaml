@@ -1,9 +1,6 @@
 # 129884 Joana Pires
-name: "Data Class Profile"
-base:
-  name: empty
+name: profile-129884
+baseProfile: empty
 inspections:
   - inspection: PublicField
-    enabled: true
-  - inspection: FieldMayBeFinal
     enabled: true
