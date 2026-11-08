@@ -31,21 +31,10 @@ jobs:
           use-annotations: true
           post-pr-comment: true
 
-      - name: Diagnostico 2
+      - name: Diagnostico 3
         if: always()
         run: |
           R="$RUNNER_TEMP/qodana/results"
-          echo "=== effective.profile.xml ==="
-          cat "$R/log/effective.profile.xml"
-          echo; echo "=== code-inspection.log ==="
-          cat "$R/log/code-inspection.log"
-          echo; echo "=== qodana_inspections_summary.csv ==="
-          cat "$R/log/qodana_inspections_summary.csv"
-          echo; echo "=== qodana.yaml / qodana-config.json ==="
-          cat "$R/log/qodana.yaml" "$R/log/qodana-config.json"
-          echo; echo "=== as inspecoes existem neste linter? ==="
-          grep -oE '"id": *"(OverlyComplexClass|OverlyComplexMethod|ClassWithTooManyFields|ClassWithTooManyMethods)"' "$R/qodana.sarif.json" | sort -u || true
-          echo; echo "=== projectStructure ==="
-          ls -la "$R/projectStructure"
-          echo; echo "=== idea.log: maven / modulos / ficheiros ==="
-          grep -iE "maven.*(import|project)|module|source root|GodClass" "$R/log/idea.log" | head -40 || true
+          grep -oE '"id": *"[A-Za-z]*(Complex|TooMany|Metric)[A-Za-z]*"' "$R/qodana.sarif.json" | sort -u
+          
+
