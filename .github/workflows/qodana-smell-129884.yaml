@@ -3,9 +3,14 @@ name: Qodana smell gate 129884
 
 on:
   pull_request:
+    branches: [ main, Teste-Feature-Envy ]
   push:
-    branches: [main]
+    branches: [ main, Teste-Feature-Envy ]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
