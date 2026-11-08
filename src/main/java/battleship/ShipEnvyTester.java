@@ -3,7 +3,6 @@ package battleship;
 public class ShipEnvyTester {
 
     public static void main(String[] args) {
-        // Declara pos diretamente como Position para evitar o cast redundante
         Position pos = new Position(0, 0);
         Ship ship = new Caravel(Compass.NORTH, pos);
 
