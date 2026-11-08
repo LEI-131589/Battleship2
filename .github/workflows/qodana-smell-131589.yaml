@@ -30,3 +30,15 @@ jobs:
           upload-result: true
           use-annotations: true
           post-pr-comment: true
+
+      - name: Diagnostico
+        if: always()
+        run: |
+          R="$RUNNER_TEMP/qodana/results"
+          ls -la "$R" "$R/log"
+          echo "--- idea.log (perfil/inspecoes) ---"
+          grep -iE "OverlyComplex|ClassWithTooMany|unknown inspection|profile" "$R/log/idea.log" | head -40
+          echo "--- regras no sarif ---"
+          grep -o '"id": *"[A-Za-z]*"' "$R/qodana.sarif.json" | sort -u | head -50
+          echo "--- ocorrencias do ficheiro ---"
+          grep -c "GodClassEnorme" "$R/qodana.sarif.json"
