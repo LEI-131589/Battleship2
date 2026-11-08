@@ -7,3 +7,18 @@ inspections:
     severity: WARNING
     options:
       m_limit: 1
+  - inspection: OverlyComplexMethod
+    enabled: true
+    severity: WARNING
+    options:
+      m_limit: 1
+  - inspection: ClassWithTooManyFields
+    enabled: true
+    severity: WARNING
+    options:
+      m_limit: 5
+  - inspection: ClassWithTooManyMethods
+    enabled: true
+    severity: WARNING
+    options:
+      m_limit: 10
