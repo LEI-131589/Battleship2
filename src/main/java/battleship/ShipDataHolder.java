@@ -1,15 +1,16 @@
 package battleship;
 
+/**
+ * Data Class refatorada com encapsulamento correto (atributos private + getters/setters).
+ */
 public class ShipDataHolder {
 
-    // 1. Tornar os campos privados (corrige o code smell de Data Class / Public Field)
     private String shipType;
     private int shipLength;
     private boolean isOperational;
     private int totalHitsReceived;
     private double armorRating;
 
-    // Construtor
     public ShipDataHolder(String shipType, int shipLength) {
         this.shipType = shipType;
         this.shipLength = shipLength;
@@ -18,7 +19,6 @@ public class ShipDataHolder {
         this.armorRating = 100.0;
     }
 
-    // 2. Adicionar Getters e Setters para garantir o encapsulamento
     public String getShipType() {
         return shipType;
     }
