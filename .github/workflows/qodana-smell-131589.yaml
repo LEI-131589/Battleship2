@@ -31,10 +31,12 @@ jobs:
           use-annotations: true
           post-pr-comment: true
 
-      - name: Diagnostico 3
+      - name: Diagnostico 4
         if: always()
         run: |
-          R="$RUNNER_TEMP/qodana/results"
-          grep -oE '"id": *"[A-Za-z]*(Complex|TooMany|Metric)[A-Za-z]*"' "$R/qodana.sarif.json" | sort -u
+          R="$RUNNER_TEMP/qodana/results/log"
+          grep -E 'class="(OverlyComplexClass|ClassWithTooManyFields|ClassWithTooManyMethods|OverlyComplexMethod)"' "$R/main.profile.xml" || echo "NAO ENCONTRADAS no main.profile.xml"
+          grep -c 'enabled="true"' "$R/main.profile.xml"
+          grep -n "God Class Profile" "$R/main.profile.xml" | head
           
 
