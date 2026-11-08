@@ -1,31 +1,30 @@
-# 129884 Joana Pires
-name: Checkstyle Quality Gate 129884
+# 129884 - Joana Pires
+name: Checkstyle naming gate 129884
 
 on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 jobs:
-  checkstyle-validation:
+  checkstyle-129884:
+    name: Checkstyle (convenções de nomes)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do repositório
-        uses: actions/checkout@v4
-
-      - name: Configurar Java 17
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
-      - name: Passo 1 - Anotar os Erros no Código
-        uses: dbelyaev/action-checkstyle@v4
+      - uses: dbelyaev/action-checkstyle@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           checkstyle_config: checkstyle/checkstyle-129884.xml
           reporter: github-pr-check
-          filter_mode: nofilter
-        continue-on-error: true
-
-      - name: Passo 2 - Chumbar o Workflow (X Vermelho)
-        run: mvn checkstyle:check -Dcheckstyle.config.location=checkstyle/checkstyle-129884.xml
+          level: error
+          fail_level: error
+          filter_mode: added
