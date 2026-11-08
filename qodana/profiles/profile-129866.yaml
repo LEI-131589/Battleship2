@@ -6,4 +6,8 @@ inspections:
     severity: WARNING
     options:
       m_limit: 30
+  - inspection: OverlyComplexMethod
+    enabled: true
+    options:
+    m_limit: 8
 

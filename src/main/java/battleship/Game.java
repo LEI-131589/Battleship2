@@ -673,5 +673,9 @@ public class Game implements IGame
 	public boolean isGameOver() {
 		return this.gameOver;
 	}
+
+	public void metodoValido129866() {
+		System.out.println("Teste Checkstyle");
+	}
 }
 

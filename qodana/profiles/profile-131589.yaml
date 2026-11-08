@@ -1,17 +1,24 @@
 # 131589 - Gonçalo Gonçalves
 name: "God Class Profile"
-base:
-  name: empty
+baseProfile: empty
 inspections:
-  - inspection: OverlyComplexClass
+  - inspection: ClassComplexity
     enabled: true
+    severity: WARNING
     options:
-      m_limit: 13 # Limite de Weighted Methods per Class (WMC)
-  - inspection: ClassWithTooManyMethods
+      m_limit: 47
+  - inspection: CyclomaticComplexity
     enabled: true
+    severity: WARNING
     options:
-      m_limit: 5 # Limite para Number of Methods (NOM)
-  - inspection: ClassWithTooManyFields
+      m_limit: 10
+  - inspection: FieldCount
     enabled: true
+    severity: WARNING
     options:
-      m_limit: 5 # Limite para Number of Attributes (NOA)
+      m_limit: 5
+  - inspection: MethodCount
+    enabled: true
+    severity: WARNING
+    options:
+      m_limit: 10
