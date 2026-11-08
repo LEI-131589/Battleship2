@@ -6,4 +6,4 @@ inspections:
     enabled: true
     severity: WARNING
     options:
-      IGNORE_ENUM_VALUES: true
+      m_limit: 18
