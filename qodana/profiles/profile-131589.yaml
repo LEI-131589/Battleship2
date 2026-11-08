@@ -1,9 +1,7 @@
 # 131589 - Gonçalo Gonçalves
-profile:
-  base:
-    name: empty
-  inspections:
-    - inspection: OverlyComplexClass
-      enabled: true
-      options:
-        m_limit: 1
+name: "God Class Profile"
+inspections:
+  - inspection: OverlyComplexClass
+    enabled: true
+    options:
+      m_limit: 1

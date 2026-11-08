@@ -1,7 +1,7 @@
 
 package battleship;
 
-public class GodClassNova {
+public class GodClassEnorme {
 
     // 12 atributos: ultrapassa o limite de 5
     private String nome;
@@ -16,8 +16,11 @@ public class GodClassNova {
     private int vidas;
     private double bonus;
     private String identificador;
+    private int complexidadeExtraA = 0;
+    private String complexidadeExtraB = "Teste";
+    private boolean complexidadeExtraC = false;
 
-    public GodClassNova() {
+    public GodClassEnorme() {
         this.nome = "Desconhecido";
         this.categoria = "Inicial";
         this.estado = 0;
@@ -38,6 +41,38 @@ public class GodClassNova {
 
     public String getIdentificador() {
         return this.identificador;
+    }
+
+    public void injetarComplexidadeAbsurda(int ciclo) {
+        for (int i = 0; i < ciclo; i++) {
+            if (i % 2 == 0 && this.complexidadeExtraA < 50) {
+                this.complexidadeExtraA += i;
+            } else if (i % 3 == 0 || this.complexidadeExtraC) {
+                this.complexidadeExtraA -= i;
+            } else if (this.complexidadeExtraB.equals("Teste") && i > 5) {
+                this.complexidadeExtraC = true;
+            } else {
+                this.complexidadeExtraB = "Alterado";
+            }
+
+            switch (i % 5) {
+                case 0: this.complexidadeExtraA += 10; break;
+                case 1: this.complexidadeExtraA += 20; break;
+                case 2: this.complexidadeExtraA += 30; break;
+                case 3: this.complexidadeExtraA += 40; break;
+                case 4: this.complexidadeExtraA += 50; break;
+                default: this.complexidadeExtraC = !this.complexidadeExtraC; break;
+            }
+
+            while (this.complexidadeExtraA > 1000) {
+                this.complexidadeExtraA -= 100;
+                // Substituímos a condição impossível por uma verificação par/ímpar
+                // que o Qodana não consegue prever, mantendo a complexidade da classe
+                if (this.complexidadeExtraA % 2 == 0) {
+                    this.complexidadeExtraC = !this.complexidadeExtraC;
+                }
+            }
+        }
     }
 
     // 1. Complexidade elevada
@@ -277,7 +312,7 @@ public class GodClassNova {
     }
 
     public static void main(String[] args) {
-        GodClassNova gc = executarGodClass();
+        GodClassEnorme gc = executarGodClass();
 
         // Lemos os valores para variáveis locais para evitar os avisos de "unused/never accessed"
         String d = gc.getDescricao();
@@ -291,8 +326,8 @@ public class GodClassNova {
         }
     }
 
-    private static GodClassNova executarGodClass() {
-        GodClassNova gc = new GodClassNova();
+    private static GodClassEnorme executarGodClass() {
+        GodClassEnorme gc = new GodClassEnorme();
         gc.processarNivel(10);
         gc.calcularPontuacao(5);
         gc.avaliarCategoria("Especial", true, false);
@@ -307,6 +342,7 @@ public class GodClassNova {
         gc.reiniciarEstado();
         gc.processarIdentificador(10);
         gc.verificarLimites();
+        gc.injetarComplexidadeAbsurda(20);
         return gc;
     }
 }
