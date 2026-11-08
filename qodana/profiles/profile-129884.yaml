@@ -1,10 +1,9 @@
-# LEI-129884 Joana Pires
-version: "1.0"
-linter: jetbrains/qodana-jvm-community:2026.2
-projectJDK: "23"
-
-profile:
-  path: qodana/profiles/profile-129884.yaml
-
-failureConditions:
-  maxProblems: 18
+# 129884 Joana Pires
+name: profile-129884
+baseProfile: empty
+inspections:
+  - inspection: PublicField
+    enabled: true
+    severity: WARNING
+    options:
+      m_limit: 19
