@@ -1,10 +1,9 @@
 # 129884 Joana Pires
 profile:
-  base:
   name: profile-129884
-  inspections:
-    - name: FeatureEnvy
-      enabled: true
-      severity: WARNING
-      option:
-        m_limit: 1
+inspections:
+  - name: FeatureEnvy
+    enabled: true
+    severity: WARNING
+    option:
+      m_limit: 1
