@@ -277,24 +277,9 @@ public class GodClass {
     }
 
     public static void main(String[] args) {
-        GodClass gc = new GodClass();
+        GodClass gc = executarGodClass();
 
-        gc.processarNivel(10);
-        gc.calcularPontuacao(5);
-        gc.avaliarCategoria("Especial", true, false);
-        gc.atualizarSaldo(50.5);
-        gc.validarEstadoAtivo(3);
-
-        gc.adicionarExperiencia(100);
-        gc.perderVida();
-        gc.recuperarVida(2);
-        gc.aplicarBonus(20);
-        gc.atualizarDescricao("Teste God Class");
-        gc.verificarDesempenho();
-        gc.reiniciarEstado();
-        gc.processarIdentificador(10);
-        gc.verificarLimites();
-
+        // Lemos os valores para variáveis locais para evitar os avisos de "unused/never accessed"
         String d = gc.getDescricao();
         String id = gc.getIdentificador();
         String n = gc.nome;
@@ -304,6 +289,24 @@ public class GodClass {
         if (d != null && id != null && n != null && c != null) {
             gc.experiencia++;
         }
+    }
 
+    private static GodClass executarGodClass() {
+        GodClass gc = new GodClass();
+        gc.processarNivel(10);
+        gc.calcularPontuacao(5);
+        gc.avaliarCategoria("Especial", true, false);
+        gc.atualizarSaldo(50.5);
+        gc.validarEstadoAtivo(3);
+        gc.adicionarExperiencia(100);
+        gc.perderVida();
+        gc.recuperarVida(2);
+        gc.aplicarBonus(20);
+        gc.atualizarDescricao("Teste God Class");
+        gc.verificarDesempenho();
+        gc.reiniciarEstado();
+        gc.processarIdentificador(10);
+        gc.verificarLimites();
+        return gc;
     }
 }
