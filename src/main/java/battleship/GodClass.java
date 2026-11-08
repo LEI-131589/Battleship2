@@ -295,12 +295,15 @@ public class GodClass {
         gc.processarIdentificador(10);
         gc.verificarLimites();
 
-        System.out.println(gc.getDescricao());
-        System.out.println(gc.getIdentificador());
+        String d = gc.getDescricao();
+        String id = gc.getIdentificador();
+        String n = gc.nome;
+        String c = gc.categoria;
 
-        System.out.println(
-                "Fim do processo para " + gc.nome +
-                        " da categoria " + gc.categoria
-        );
+        // Uma operação condicional simples apenas para gastar as variáveis lidas
+        if (d != null && id != null && n != null && c != null) {
+            gc.experiencia++;
+        }
+
     }
 }
