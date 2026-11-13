@@ -237,5 +237,90 @@ public class ShipTest {
         assertEquals(3, shipBorder.getAdjacentPositions().size(), "Error: The number of adjacent positions of a barge in the middle of the tray should be 8.");
     }
 
+    @Test
+    @DisplayName("Should build all valid ship types and return null for invalid kind")
+    void testBuildShip() {
+        Position pos = new Position(2, 2);
+        assertInstanceOf(Barge.class, Ship.buildShip("barca", Compass.NORTH, pos));
+        assertInstanceOf(Caravel.class, Ship.buildShip("caravela", Compass.NORTH, pos));
+        assertInstanceOf(Carrack.class, Ship.buildShip("nau", Compass.NORTH, pos));
+        assertInstanceOf(Frigate.class, Ship.buildShip("fragata", Compass.NORTH, pos));
+        assertInstanceOf(Galleon.class, Ship.buildShip("galeao", Compass.NORTH, pos));
+        assertNull(Ship.buildShip("submarino", Compass.NORTH, pos));
 
+        assertThrows(AssertionError.class, () -> Ship.buildShip(null, Compass.NORTH, pos));
+        assertThrows(AssertionError.class, () -> Ship.buildShip("barca", null, pos));
+        assertThrows(AssertionError.class, () -> Ship.buildShip("barca", Compass.NORTH, null));
+    }
+
+    @Test
+    @DisplayName("Should return initial anchor position and allow setting positions for Jackson")
+    void testGetPositionAndSetPositionsForJackson() {
+        assertEquals(new Position(5, 5), ship.getPosition());
+
+        List<IPosition> customPositions = List.of(new Position(1, 1), new Position(1, 2));
+        ship.setPositionsForJackson(customPositions);
+        assertEquals(2, ship.getPositions().size());
+        assertEquals(new Position(1, 1), ship.getPositions().get(0));
+    }
+
+    @Test
+    @DisplayName("Should calculate extreme coordinates and adjacent positions for multi-cell ships")
+    void testMultiCellShipExtremesAndAdjacents() {
+        // Navio vertical (linhas 2 e 3, coluna 4)
+        Ship verticalCaravel = new Caravel(Compass.NORTH, new Position(2, 4));
+        assertEquals(2, verticalCaravel.getTopMostPos());
+        assertEquals(3, verticalCaravel.getBottomMostPos());
+        assertEquals(4, verticalCaravel.getLeftMostPos());
+        assertEquals(4, verticalCaravel.getRightMostPos());
+
+        // Cobre também getAdjacentPositions com sobreposição de adjacentes e posições do próprio navio
+        List<IPosition> adjacents = verticalCaravel.getAdjacentPositions();
+        assertEquals(10, adjacents.size());
+
+        // Navio horizontal (linha 4, colunas 2, 3 e 4)
+        Ship horizontalCarrack = new Carrack(Compass.EAST, new Position(4, 2));
+        assertEquals(4, horizontalCarrack.getTopMostPos());
+        assertEquals(4, horizontalCarrack.getBottomMostPos());
+        assertEquals(2, horizontalCarrack.getLeftMostPos());
+        assertEquals(4, horizontalCarrack.getRightMostPos());
+    }
+
+    @Test
+    @DisplayName("Should verify if ship is completely inside the board across all boundaries")
+    void testIsInsideBoard() {
+        assertTrue(ship.isInsideBoard());
+
+        Ship outsideTop = new Barge(Compass.NORTH, new Position(-1, 5));
+        Ship outsideBottom = new Barge(Compass.NORTH, new Position(Game.BOARD_SIZE, 5));
+        Ship outsideLeft = new Barge(Compass.NORTH, new Position(5, -1));
+        Ship outsideRight = new Barge(Compass.NORTH, new Position(5, Game.BOARD_SIZE));
+
+        assertFalse(outsideTop.isInsideBoard());
+        assertFalse(outsideBottom.isInsideBoard());
+        assertFalse(outsideLeft.isInsideBoard());
+        assertFalse(outsideRight.isInsideBoard());
+    }
+
+    @Test
+    @DisplayName("Should sink ship completely and format toString properly")
+    void testSinkAndToString() {
+        Ship caravel = new Caravel(Compass.NORTH, new Position(2, 2));
+        assertTrue(caravel.stillFloating());
+
+        caravel.sink();
+        assertFalse(caravel.stillFloating());
+
+        assertEquals("[Barca n F6]", ship.toString());
+    }
+
+    @Test
+    @DisplayName("Should throw AssertionError on invalid/null arguments")
+    void testAssertions() {
+        assertThrows(AssertionError.class, () -> ship.occupies(null));
+        assertThrows(AssertionError.class, () -> ship.tooCloseTo((IShip) null));
+        assertThrows(AssertionError.class, () -> ship.tooCloseTo((IPosition) null));
+        assertThrows(AssertionError.class, () -> ship.shoot(null));
+        assertThrows(AssertionError.class, () -> ship.shoot(new Position(-1, -1)));
+    }
 }
