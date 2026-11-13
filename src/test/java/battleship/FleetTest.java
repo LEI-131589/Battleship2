@@ -186,4 +186,79 @@ import java.util.ArrayList;
 			fleet.addShip(ship);
 			assertDoesNotThrow(fleet::printStatus, "Error: printStatus should not throw any exceptions.");
 		}
+
+		@Test
+		@DisplayName("Should return sunk ships accurately")
+		void testGetSunkShips() {
+			IShip ship1 = new Barge(Compass.NORTH, new Position(1, 1));
+			IShip ship2 = new Caravel(Compass.NORTH, new Position(4, 4));
+			fleet.addShip(ship1);
+			fleet.addShip(ship2);
+
+			assertTrue(fleet.getSunkShips().isEmpty(), "Initially no ships should be sunk.");
+
+			ship1.getPositions().get(0).shoot(); // Afunda a barca (tamanho 1)
+			List<IShip> sunkShips = fleet.getSunkShips();
+			assertEquals(1, sunkShips.size(), "One ship should be sunk.");
+			assertEquals(ship1, sunkShips.get(0), "The sunk ship should be ship1.");
+		}
+
+		@Test
+		@DisplayName("Should reject adding ship when fleet exceeds FLEET_SIZE")
+		void testAddShipExceedingFleetSize() {
+			// Preenche com 12 navios (FLEET_SIZE = 11, e a condição é ships.size() <= FLEET_SIZE)
+			for (int row = 0; row < 10; row += 2) {
+				fleet.addShip(new Barge(Compass.NORTH, new Position(row, 0)));
+				fleet.addShip(new Barge(Compass.NORTH, new Position(row, 2)));
+			}
+			fleet.addShip(new Barge(Compass.NORTH, new Position(0, 4))); // 11º navio (size passa a 11)
+			fleet.addShip(new Barge(Compass.NORTH, new Position(2, 4))); // 12º navio (size passa a 12)
+
+			IShip extraShip = new Barge(Compass.NORTH, new Position(4, 4)); // 13º navio (12 <= 11 é false!)
+			assertFalse(fleet.addShip(extraShip), "Should not add ship when size > FLEET_SIZE.");
+		}
+
+		@Test
+		@DisplayName("Should check if all ships are sunk across empty, partial, and full sunk states")
+		void testAreAllShipsSunk() {
+			// Caso 1: Frota vazia
+			assertFalse(fleet.areAllShipsSunk(), "Empty fleet should return false.");
+
+			// Caso 2: Frota com navios ainda a flutuar
+			IShip ship1 = new Barge(Compass.NORTH, new Position(1, 1));
+			IShip ship2 = new Barge(Compass.NORTH, new Position(3, 3));
+			fleet.addShip(ship1);
+			fleet.addShip(ship2);
+			assertFalse(fleet.areAllShipsSunk(), "Should return false when ships are still floating.");
+
+			// Caso 3: Apenas um navio afundado
+			ship1.getPositions().get(0).shoot();
+			assertFalse(fleet.areAllShipsSunk(), "Should return false when only some ships are sunk.");
+
+			// Caso 4: Todos os navios afundados
+			ship2.getPositions().get(0).shoot();
+			assertTrue(fleet.areAllShipsSunk(), "Should return true when all ships are sunk.");
+		}
+
+		@Test
+		@DisplayName("Should execute all print methods without throwing exceptions")
+		void testPrintMethods() {
+			IShip ship = new Barge(Compass.NORTH, new Position(1, 1));
+			fleet.addShip(ship);
+
+			assertDoesNotThrow(() -> fleet.printShips(fleet.getShips()), "printShips should not throw.");
+			assertDoesNotThrow(() -> fleet.printShipsByCategory("Barca"), "printShipsByCategory should not throw.");
+			assertDoesNotThrow(fleet::printFloatingShips, "printFloatingShips should not throw.");
+			assertDoesNotThrow(fleet::printAllShips, "printAllShips should not throw.");
+		}
+
+		@Test
+		@DisplayName("Should throw AssertionError when null arguments are passed")
+		void testNullAssertions() {
+			assertThrows(AssertionError.class, () -> fleet.addShip(null));
+			assertThrows(AssertionError.class, () -> fleet.getShipsLike(null));
+			assertThrows(AssertionError.class, () -> fleet.shipAt(null));
+			assertThrows(AssertionError.class, () -> fleet.printShips(null));
+			assertThrows(AssertionError.class, () -> fleet.printShipsByCategory(null));
+		}
 	}

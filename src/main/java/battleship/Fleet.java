@@ -260,5 +260,3 @@ public class Fleet implements IFleet {
 		return getFloatingShips().isEmpty();
 	}
 }
-
-
