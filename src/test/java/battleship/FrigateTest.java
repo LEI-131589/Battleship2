@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test class for class Frigate.
  *
- * Author: ${user.name}
+ * Author: Inês Marchante
  * Date: 2026-11-14 14:24
  *
  * Cyclomatic Complexity:
