@@ -89,7 +89,7 @@ public class Move implements IMove {
 				validShots++;
 				if (result.ship() == null)
 					missedShots++; // Tiro na água
-				else{
+				else {
 					String boatName = result.ship().getCategory();
 					hitsPerBoat.put(boatName, hitsPerBoat.getOrDefault(boatName, 0) + 1);
 					if (result.sunk())
@@ -189,9 +189,7 @@ public class Move implements IMove {
 		// Serializar o JSON utilizando Jackson
 		String jsonString;
 
-		// Serializar os tiros gerados em JSON usando a biblioteca Jackson
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+		ObjectMapper objectMapper = getObjectMapper();
 
 		try {
 			jsonString = objectMapper.writeValueAsString(response);
@@ -205,4 +203,15 @@ public class Move implements IMove {
 		// Retornar o JSON
 		return jsonString;
 	}
+		/**
+		 * Protected method to provide the ObjectMapper instance.
+		 * Extracted to allow overriding in unit tests for exception handling coverage.
+		 *
+		 * @return A configured ObjectMapper instance
+		 */
+		protected ObjectMapper getObjectMapper() {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			return mapper;
+		}
 }
