@@ -18,6 +18,11 @@ Grupo TP05_LEI-6
 | Engenharia Informática | 131589 | Gonçalo Gonçalves | LEI-131589 e mambogamer13
 
 ---
+## Tarefa B - passo 3 - guiao 4- Automação de Testes (CI)
+O projeto tem a integração contínua (CI) configurada via GitHub Actions.
+
+Sempre que é feito um Push para o repositório, o ficheiro `.github/workflows/maven-guiao4.yml` 
+executa automaticamente a bateria de testes unitários JUnit 5 usando o Maven.
 
 ## Tarefa 2 - parte A - passo 10: Bloqueio de Merge via Quality Gate
 
