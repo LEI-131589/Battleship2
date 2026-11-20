@@ -405,13 +405,21 @@ class TasksTest {
 	}
 
 	@Test
-	@DisplayName("menu() path 7: saves and reloads a game interactively via 'gravar' and 'carregar'")
-	void menu7() {
+	@DisplayName("menu() path 7: saves, handles corrupted file, and reloads a valid game via 'gravar' and 'carregar'")
+	void menu7() throws Exception {
 		String tempName = "junit_temp_save_129866.json";
-		File savedFile = new File("data", tempName);
+		String corruptName = "junit_temp_corrupt_129866.json";
+		File dataDir = new File("data");
+		if (!dataDir.exists()) {
+			dataDir.mkdirs();
+		}
+		File savedFile = new File(dataDir, tempName);
+		File corruptFile = new File(dataDir, corruptName);
 		if (savedFile.exists()) {
 			savedFile.delete();
 		}
+		java.nio.file.Files.writeString(corruptFile.toPath(), "{ corrupted json");
+
 		try {
 			String input = String.join("\n",
 					"gerafrota",
@@ -423,7 +431,8 @@ class TasksTest {
 					"exit",
 					"carregar",
 					"ficheiro_inexistente_xyz",
-					"exit",
+					corruptName,
+					tempName,
 					"desisto"
 			) + "\n";
 			provideInput(input);
@@ -432,11 +441,16 @@ class TasksTest {
 			assertAll("Interactive save/load flow",
 					() -> assertTrue(output.contains("Jogo gravado com sucesso"), "Error: expected save confirmation"),
 					() -> assertTrue(output.contains("Deseja reescrever?"), "Error: expected overwrite prompt"),
-					() -> assertTrue(output.contains("Ficheiro não encontrado"), "Error: expected missing file message")
+					() -> assertTrue(output.contains("Ficheiro não encontrado"), "Error: expected missing file message"),
+					() -> assertTrue(output.contains("Tente novamente com um ficheiro válido."), "Error: expected invalid file retry message"),
+					() -> assertTrue(output.contains("Jogo carregado com sucesso!"), "Error: expected load confirmation")
 			);
 		} finally {
 			if (savedFile.exists()) {
 				savedFile.delete();
+			}
+			if (corruptFile.exists()) {
+				corruptFile.delete();
 			}
 		}
 	}
