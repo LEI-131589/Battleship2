@@ -437,8 +437,6 @@ public class Game implements IGame
 
 		Move move = new Move(moveNumber, shots, shotResults);
 
-//		System.out.println(move);
-
 		move.processEnemyFire(true);
 
 		alienMoves.add(move);
@@ -447,7 +445,7 @@ public class Game implements IGame
 
 		if (this.myFleet.areAllShipsSunk()) {
 			this.gameOver = true;
-			declareVictory("Alien"); // O Inimigo afundou a tua frota
+			declareVictory("Alien"); // O SS afundou a tua frota
 		} else if (this.alienFleet.areAllShipsSunk()) {
 			this.gameOver = true;
 			declareVictory("Player"); // Tu afundaste a frota do inimigo
