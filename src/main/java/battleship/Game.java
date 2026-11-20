@@ -183,7 +183,7 @@ public class Game implements IGame
 	private Integer countInvalidShots;
 	private Integer countRepeatedShots;
 	private Integer countHits;
-	private Integer countSinks;
+	final private Integer countSinks;
 	private int moveNumber;
 	private boolean gameOver;
 
