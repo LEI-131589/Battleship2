@@ -389,8 +389,10 @@ public abstract class Ship implements IShip
 	{
 		assert this != null;
 
-		return (getLeftMostPos() >= 0 && getRightMostPos() <= Game.BOARD_SIZE - 1 && getTopMostPos() >= 0
-				&& getBottomMostPos() <= Game.BOARD_SIZE - 1);
+		boolean withinHorizontalBounds = getLeftMostPos() >= 0 && getRightMostPos() <= Game.BOARD_SIZE - 1;
+
+		boolean withinVerticalBounds = getTopMostPos() >= 0 && getBottomMostPos() <= Game.BOARD_SIZE - 1;
+		return (withinHorizontalBounds && withinVerticalBounds);
 	}
 	/**
 	 * Shoot.
