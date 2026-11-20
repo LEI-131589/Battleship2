@@ -88,9 +88,13 @@ class TasksTest {
 
 	@Test
 	@DisplayName("Tasks() constructor creates a valid Tasks instance")
-	void Tasks() {
-		Tasks tasks = new Tasks();
-		assertNotNull(tasks, "Error: expected Tasks instance not to be null");
+	void Tasks() throws Exception {
+		java.lang.reflect.Constructor<Tasks> constructor = Tasks.class.getDeclaredConstructor();
+		assertTrue(java.lang.reflect.Modifier.isPrivate(constructor.getModifiers()),
+				"Error: expected Tasks constructor to be private");
+		constructor.setAccessible(true);
+		assertThrows(java.lang.reflect.InvocationTargetException.class, constructor::newInstance,
+				"Error: expected InvocationTargetException when invoking private constructor");
 	}
 
 	// --- menuHelp() (CC = 1) ---

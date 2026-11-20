@@ -59,6 +59,10 @@ public class Tasks {
 	private static final String NAVIOS = "navios";
 	private static final String JSON_EXTENSION = ".json";
 
+	private Tasks() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * This task also tests the fighting element of a round of three shots
 	 */
