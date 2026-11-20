@@ -57,6 +57,7 @@ public class Tasks {
 	private static final String SIMULA = "simula";
 	private static final String EXIT = "exit";
 	private static final String NAVIOS = "navios";
+	private static final String JSON_EXTENSION = ".json";
 
 	/**
 	 * This task also tests the fighting element of a round of three shots
@@ -297,8 +298,8 @@ public class Tasks {
 				return;
 			}
 
-			if (!nomeFicheiro.endsWith(".json")) {
-				nomeFicheiro += ".json";
+			if (!nomeFicheiro.endsWith(JSON_EXTENSION)) {
+				nomeFicheiro += JSON_EXTENSION;
 			}
 
 			File dir = new File("data");
@@ -333,8 +334,8 @@ public class Tasks {
 				break;
 			}
 
-			if (!nomeFicheiro.endsWith(".json")) {
-				nomeFicheiro += ".json";
+			if (!nomeFicheiro.endsWith(JSON_EXTENSION)) {
+				nomeFicheiro += JSON_EXTENSION;
 			}
 
 			File ficheiro = new File("data", nomeFicheiro);
