@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -154,7 +153,7 @@ public class Game implements IGame
 			Map<String, Object> simplePos = new LinkedHashMap<>();
 			// We use getClassicRow() and getClassicColumn() based on your current JSON output
 			simplePos.put("row", String.valueOf(shot.getClassicRow()));
-			simplePos.put("column", shot.getClassicColumn());
+			simplePos.put(COLUMN_KEY, shot.getClassicColumn());
 			simplifiedShots.add(simplePos);
 		}
 
@@ -176,6 +175,7 @@ public class Game implements IGame
 	//------------------------------------------------------------------
 	public static final int BOARD_SIZE = 10;
 	public static final int NUMBER_SHOTS = 3;
+	private static final String COLUMN_KEY = "column";
 
 	private static final char EMPTY_MARKER = '.';
 	private static final char SHIP_MARKER = '#';
@@ -193,7 +193,7 @@ public class Game implements IGame
 	private Integer countInvalidShots;
 	private Integer countRepeatedShots;
 	private Integer countHits;
-	private Integer countSinks;
+	private final Integer countSinks;
 	private int moveNumber;
 	private boolean gameOver;
 
@@ -326,84 +326,15 @@ public class Game implements IGame
 
 		while (true) {
 			try {
-				if (!in.hasNextLine()) {
+				String linha = readNextNonEmptyLine(in);
+				if (linha == null) {
 					return "{}";
 				}
 
-				String linha = in.nextLine().trim();
-
-				while (linha.isEmpty() && in.hasNextLine()) {
-					linha = in.nextLine().trim();
-				}
-
-				if (linha.isEmpty()) {
-					return "{}";
-				}
-
-				// Remove o prefixo "rajada" caso exista
-				String linhaLimpa = linha;
-				if (linhaLimpa.toLowerCase().startsWith("rajada")) {
-					linhaLimpa = linhaLimpa.substring(6).trim();
-				}
-
-				List<IPosition> shots = new ArrayList<>();
-
-				// Deteção de JSON: verifica se começa por '[' ou '{' ou se contém os campos "row"/"column"
-				boolean isJson = linhaLimpa.startsWith("[")
-						|| linhaLimpa.startsWith("{")
-						|| linhaLimpa.contains("\"row\"")
-						|| linhaLimpa.contains("\"column\"")
-						|| linhaLimpa.contains("'row'")
-						|| linhaLimpa.contains("'column'");
-
-				if (isJson) {
-					StringBuilder jsonBuilder = new StringBuilder();
-
-					if (!linhaLimpa.startsWith("[")) {
-						jsonBuilder.append("[\n");
-					}
-
-					jsonBuilder.append(linhaLimpa).append("\n");
-
-					// Lê as linhas seguintes até encontrar o fecho do array ']'
-					while (!linhaLimpa.contains("]") && in.hasNextLine()) {
-						linha = in.nextLine();
-						linhaLimpa = linha.trim();
-						jsonBuilder.append(linha).append("\n");
-					}
-
-					String jsonText = jsonBuilder.toString().trim();
-					if (!jsonText.endsWith("]")) {
-						jsonText += "\n]";
-					}
-
-					List<String> coordsTraduzidas = convertJsonToClassicFormat(jsonText);
-					for (String coord : coordsTraduzidas) {
-						Scanner tiroScanner = new Scanner(coord + "\n");
-						shots.add(Tasks.readClassicPosition(tiroScanner));
-					}
-				} else {
-					// Limpa aspas simples e duplas no formato clássico (ex: 'A3' -> A3)
-					linhaLimpa = linhaLimpa.replace("'", "").replace("\"", "");
-
-					Scanner inputScanner = new Scanner(linhaLimpa);
-
-					while (shots.size() < NUMBER_SHOTS && inputScanner.hasNext()) {
-						String token = inputScanner.next();
-
-						if (token.matches("[A-Za-z]")) {
-							if (inputScanner.hasNextInt()) {
-								int row = inputScanner.nextInt();
-								shots.add(new Position(token.toUpperCase().charAt(0), row));
-							} else {
-								throw new IllegalArgumentException("Posição incompleta! A coluna '" + token + "' não é seguida por uma linha.");
-							}
-						} else {
-							Scanner singleScanner = new Scanner(token);
-							shots.add(Tasks.readClassicPosition(singleScanner));
-						}
-					}
-				}
+				String linhaLimpa = stripRajadaPrefix(linha);
+				List<IPosition> shots = isJsonShotInput(linhaLimpa)
+						? parseJsonShots(linha, linhaLimpa, in)
+						: parseClassicShots(linhaLimpa);
 
 				if (shots.size() != NUMBER_SHOTS) {
 					throw new IllegalArgumentException("Você deve inserir exatamente " + NUMBER_SHOTS + " posições!");
@@ -420,6 +351,79 @@ public class Game implements IGame
 				System.out.println("-> A jogada não foi contabilizada. Introduza a jogada novamente:\n");
 			}
 		}
+	}
+
+	private String readNextNonEmptyLine(Scanner in) {
+		if (!in.hasNextLine()) {
+			return null;
+		}
+		String linha = in.nextLine().trim();
+		while (linha.isEmpty() && in.hasNextLine()) {
+			linha = in.nextLine().trim();
+		}
+		return linha.isEmpty() ? null : linha;
+	}
+
+	private String stripRajadaPrefix(String linha) {
+		if (linha.toLowerCase().startsWith("rajada")) {
+			return linha.substring(6).trim();
+		}
+		return linha;
+	}
+
+	private boolean isJsonShotInput(String linhaLimpa) {
+		return linhaLimpa.startsWith("[")
+				|| linhaLimpa.startsWith("{")
+				|| linhaLimpa.contains("\"row\"")
+				|| linhaLimpa.contains("\"" + COLUMN_KEY + "\"")
+				|| linhaLimpa.contains("'row'")
+				|| linhaLimpa.contains("'" + COLUMN_KEY + "'");
+	}
+
+	private List<IPosition> parseJsonShots(String primeiraLinha, String primeiraLinhaLimpa, Scanner in) {
+		StringBuilder jsonBuilder = new StringBuilder();
+		if (!primeiraLinhaLimpa.startsWith("[")) {
+			jsonBuilder.append("[\n");
+		}
+		jsonBuilder.append(primeiraLinhaLimpa).append("\n");
+
+		String linhaAtualLimpa = primeiraLinhaLimpa;
+		while (!linhaAtualLimpa.contains("]") && in.hasNextLine()) {
+			String linha = in.nextLine();
+			linhaAtualLimpa = linha.trim();
+			jsonBuilder.append(linha).append("\n");
+		}
+
+		String jsonText = jsonBuilder.toString().trim();
+		if (!jsonText.endsWith("]")) {
+			jsonText += "\n]";
+		}
+
+		List<IPosition> shots = new ArrayList<>();
+		for (String coord : convertJsonToClassicFormat(jsonText)) {
+			shots.add(Tasks.readClassicPosition(new Scanner(coord + "\n")));
+		}
+		return shots;
+	}
+
+	private List<IPosition> parseClassicShots(String linhaLimpa) {
+		String sanitized = linhaLimpa.replace("'", "").replace("\"", "");
+		Scanner inputScanner = new Scanner(sanitized);
+		List<IPosition> shots = new ArrayList<>();
+
+		while (shots.size() < NUMBER_SHOTS && inputScanner.hasNext()) {
+			String token = inputScanner.next();
+			if (token.matches("[A-Za-z]")) {
+				if (!inputScanner.hasNextInt()) {
+					throw new IllegalArgumentException("Posição incompleta! A coluna '" + token + "' não é seguida por uma linha.");
+				}
+				int row = inputScanner.nextInt();
+				shots.add(new Position(token.toUpperCase().charAt(0), row));
+			} else {
+				shots.add(Tasks.readClassicPosition(new Scanner(token)));
+			}
+		}
+		return shots;
 	}
 
 	/**
@@ -649,12 +653,12 @@ public class Game implements IGame
 
 			for (Map<String, Object> tiro : tiros) {
 
-				if (tiro.get("row") == null || tiro.get("column") == null) {
+				if (tiro.get("row") == null || tiro.get(COLUMN_KEY) == null) {
 					throw new IllegalArgumentException("O JSON deve conter os campos 'row' e 'column'.");
 				}
 
 				String row = String.valueOf(tiro.get("row")).trim();
-				String col = String.valueOf(tiro.get("column")).trim();
+				String col = String.valueOf(tiro.get(COLUMN_KEY)).trim();
 
 				if (col.endsWith(".0")) {
 					col = col.replace(".0", "");
