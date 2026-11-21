@@ -46,6 +46,11 @@ public class Tasks {
 	private static final String SIMULA = "simula";
 	private static final String EXIT = "exit";
 	private static final String NAVIOS = "navios";
+	private static final String JSON_EXTENSION = ".json";
+
+	private Tasks() {
+		throw new IllegalStateException("Utility class");
+	}
 
 	/**
 	 * This task also tests the fighting element of a round of three shots
@@ -119,23 +124,7 @@ public class Tasks {
 					}
 					break;
 				case SIMULA:
-					if (game != null) {
-						while (game.getRemainingShips() > 0){
-							game.randomEnemyFire();
-							myFleet.printStatus();
-							game.printMyBoard(true, false);
-							try {
-								Thread.sleep(3000);
-							} catch (InterruptedException e) {
-								Thread.currentThread().interrupt(); // Best practice: restore interrupt status
-							}
-						}
-
-						if (game.getRemainingShips() == 0) {
-							game.over();
-							System.exit(0);
-						}
-					}
+					simularJogo(game, myFleet);
 					break;
 				case TIROS:
 					if (game != null)
@@ -151,6 +140,26 @@ public class Tasks {
 			command = in.next();
 		}
 		System.out.println(GOODBYE_MESSAGE);
+	}
+
+	private static void simularJogo(IGame game, IFleet myFleet) {
+		if (game != null) {
+			while (game.getRemainingShips() > 0){
+				game.randomEnemyFire();
+				myFleet.printStatus();
+				game.printMyBoard(true, false);
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt(); // Best practice: restore interrupt status
+				}
+			}
+
+			if (game.getRemainingShips() == 0) {
+				game.over();
+				System.exit(0);
+			}
+		}
 	}
 
 	/**
@@ -287,7 +296,10 @@ public class Tasks {
 				return;
 			}
 
-			String ficheiroNormalizado = nomeFicheiro.endsWith(".json") ? nomeFicheiro : nomeFicheiro + ".json";
+			if (!nomeFicheiro.endsWith(JSON_EXTENSION)) {
+				nomeFicheiro += JSON_EXTENSION;
+			}
+
 			File dir = new File("data");
 			if (!dir.exists()) {
 				dir.mkdirs();
@@ -332,9 +344,9 @@ public class Tasks {
 		return game;
 	}
 
-	private static Game tryLoadGameFile(String nomeFicheiro) {
-		String ficheiroNormalizado = nomeFicheiro.endsWith(".json") ? nomeFicheiro : nomeFicheiro + ".json";
-		File ficheiro = new File("data", ficheiroNormalizado);
+			if (!nomeFicheiro.endsWith(JSON_EXTENSION)) {
+				nomeFicheiro += JSON_EXTENSION;
+			}
 
 		if (!ficheiro.exists()) {
 			System.out.println("Erro: Ficheiro não encontrado na pasta 'data'. Tente novamente.");

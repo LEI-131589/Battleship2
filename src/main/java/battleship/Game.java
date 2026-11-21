@@ -1,33 +1,24 @@
 package battleship;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-
-import java.io.FileOutputStream;
-
-import java.util.*;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.parser.PdfTextExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Game implements IGame
 {
@@ -193,7 +184,7 @@ public class Game implements IGame
 	private Integer countInvalidShots;
 	private Integer countRepeatedShots;
 	private Integer countHits;
-	private final Integer countSinks;
+	final private Integer countSinks;
 	private int moveNumber;
 	private boolean gameOver;
 
@@ -455,8 +446,6 @@ public class Game implements IGame
 
 		Move move = new Move(moveNumber, shots, shotResults);
 
-
-
 		move.processEnemyFire(true);
 
 		alienMoves.add(move);
@@ -465,7 +454,7 @@ public class Game implements IGame
 
 		if (this.myFleet.areAllShipsSunk()) {
 			this.gameOver = true;
-			declareVictory("Alien"); // O Inimigo afundou a tua frota
+			declareVictory("Alien"); // O SS afundou a tua frota
 		} else if (this.alienFleet.areAllShipsSunk()) {
 			this.gameOver = true;
 			declareVictory("Player"); // Tu afundaste a frota do inimigo
