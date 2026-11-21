@@ -15,17 +15,6 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 /**
  * The type Tasks.
  */
@@ -296,7 +285,8 @@ public class Tasks {
 	// -------------------------------------------------------------------------
 
 	private static void gravarJogoInterativo(Game game, Scanner in) {
-		while(true) {
+		boolean saved = false;
+		while (!saved) {
 			System.out.println("> Indique o nome do ficheiro JSON (caso pretenda sair escreva o comando \"exit\")");
 			System.out.print("> nome : ");
 			String nomeFicheiro = in.next();
@@ -315,47 +305,57 @@ public class Tasks {
 				dir.mkdirs();
 			}
 
-			File ficheiro = new File(dir, nomeFicheiro);
-			if (ficheiro.exists()) {
-				System.out.print("O ficheiro '" + nomeFicheiro + "' já existe. Deseja reescrever? (S/N): ");
-				String resposta = in.next();
-				if (!resposta.equalsIgnoreCase("S")) {
-					System.out.println("Gravação cancelada.");
-					continue;
-				}
+			File ficheiro = new File(dir, ficheiroNormalizado);
+			if (canOverwriteFile(ficheiro, ficheiroNormalizado, in)) {
+				gravarJogo(game, ficheiro.getPath());
+				saved = true;
 			}
-
-			gravarJogo(game, ficheiro.getPath());
-			break;
 		}
+	}
 
+	private static boolean canOverwriteFile(File ficheiro, String nomeFicheiro, Scanner in) {
+		if (!ficheiro.exists()) {
+			return true;
+		}
+		System.out.print("O ficheiro '" + nomeFicheiro + "' já existe. Deseja reescrever? (S/N): ");
+		String resposta = in.next();
+		if (!resposta.equalsIgnoreCase("S")) {
+			System.out.println("Gravação cancelada.");
+			return false;
+		}
+		return true;
 	}
 
 	private static Game carregarJogoInterativo(Scanner in) {
 		Game game = null;
-		while (game == null) {
+		boolean cancelled = false;
+
+		while (game == null && !cancelled) {
 			System.out.println("> Indique o nome do ficheiro JSON (caso pretenda sair escreva o comando \"exit\")");
 			System.out.print("> nome : ");
 			String nomeFicheiro = in.next();
 
 			if (nomeFicheiro.equalsIgnoreCase(EXIT)) {
-				break;
+				cancelled = true;
+			} else {
+				game = tryLoadGameFile(nomeFicheiro);
 			}
+		}
+		return game;
+	}
 
 			if (!nomeFicheiro.endsWith(JSON_EXTENSION)) {
 				nomeFicheiro += JSON_EXTENSION;
 			}
 
-			File ficheiro = new File("data", nomeFicheiro);
-			if (!ficheiro.exists()) {
-				System.out.println("Erro: Ficheiro não encontrado na pasta 'data'. Tente novamente.");
-				continue;
-			}
+		if (!ficheiro.exists()) {
+			System.out.println("Erro: Ficheiro não encontrado na pasta 'data'. Tente novamente.");
+			return null;
+		}
 
-			game = carregarJogo(ficheiro.getPath());
-			if (game == null) {
-				System.out.println("Tente novamente com um ficheiro válido.");
-			}
+		Game game = carregarJogo(ficheiro.getPath());
+		if (game == null) {
+			System.out.println("Tente novamente com um ficheiro válido.");
 		}
 		return game;
 	}
