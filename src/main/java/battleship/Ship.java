@@ -231,10 +231,13 @@ public abstract class Ship implements IShip
     @Override
     public boolean stillFloating()
     {
-	for (int i = 0; i < getSize(); i++)
-	    if (!getPositions().get(i).isHit())
-			return true;
-	return false;
+		for (int i = 0; i < getSize(); i++) {
+			boolean isPositionIntact = !getPositions().get(i).isHit();
+			if (isPositionIntact) {
+				return true;
+			}
+		}
+		return false;
     }
 
 	/**
@@ -250,11 +253,14 @@ public abstract class Ship implements IShip
     @Override
     public int getTopMostPos()
     {
-	int top = getPositions().get(0).getRow();
-	for (int i = 1; i < getSize(); i++)
-	    if (getPositions().get(i).getRow() < top)
-		top = getPositions().get(i).getRow();
-	return top;
+		int top = getPositions().get(0).getRow();
+		for (int i = 1; i < getSize(); i++) {
+			int currentRow = getPositions().get(i).getRow();
+			if (currentRow < top) {
+				top = currentRow;
+			}
+		}
+		return top;
     }
 
 	/**
@@ -270,11 +276,14 @@ public abstract class Ship implements IShip
     @Override
     public int getBottomMostPos()
     {
-	int bottom = getPositions().get(0).getRow();
-	for (int i = 1; i < getSize(); i++)
-	    if (getPositions().get(i).getRow() > bottom)
-			bottom = getPositions().get(i).getRow();
-	return bottom;
+		int bottom = getPositions().get(0).getRow();
+		for (int i = 1; i < getSize(); i++) {
+			int currentRow = getPositions().get(i).getRow();
+			if (currentRow > bottom) {
+				bottom = currentRow;
+			}
+		}
+		return bottom;
     }
 
 	/**
@@ -290,11 +299,14 @@ public abstract class Ship implements IShip
     @Override
     public int getLeftMostPos()
     {
-	int left = getPositions().get(0).getColumn();
-	for (int i = 1; i < getSize(); i++)
-	    if (getPositions().get(i).getColumn() < left)
-			left = getPositions().get(i).getColumn();
-	return left;
+		int left = getPositions().get(0).getColumn();
+		for (int i = 1; i < getSize(); i++) {
+			int currentColumn = getPositions().get(i).getColumn();
+			if (currentColumn < left) {
+				left = currentColumn;
+			}
+		}
+		return left;
     }
 
 	/**
@@ -310,11 +322,14 @@ public abstract class Ship implements IShip
     @Override
     public int getRightMostPos()
     {
-	int right = getPositions().get(0).getColumn();
-	for (int i = 1; i < getSize(); i++)
-	    if (getPositions().get(i).getColumn() > right)
-		right = getPositions().get(i).getColumn();
-	return right;
+		int right = getPositions().get(0).getColumn();
+		for (int i = 1; i < getSize(); i++) {
+			int currentColumn = getPositions().get(i).getColumn();
+			if (currentColumn > right) {
+				right = currentColumn;
+			}
+		}
+		return right;
     }
 
 	/**
